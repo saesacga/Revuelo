@@ -8,8 +8,11 @@ public class InputHandler : MonoBehaviour
     [SerializeField] private InputActionAsset _inputActionAsset;
 
     private InputAction _interact;
+    private InputAction _point;
+
     public InputAction Interact => _interact;
-    
+    public InputAction Point => _point;
+
     private void OnEnable()
     {
         _inputActionAsset.FindActionMap("Player").Enable();
@@ -30,5 +33,6 @@ public class InputHandler : MonoBehaviour
         Instance = this;
 
         _interact = _inputActionAsset.FindAction("Interact");
+        _point = _inputActionAsset.FindAction("Point");
     }
 }

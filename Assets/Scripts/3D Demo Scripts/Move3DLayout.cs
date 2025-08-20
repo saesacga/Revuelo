@@ -28,7 +28,7 @@ public class Move3DLayout : MonoBehaviour
             {
                 hit.collider.transform.SetParent(_newParent, true);
 
-                GetComponent<FlexalonObject>().ForceUpdate();
+                GetComponent<FlexalonObject>()?.ForceUpdate();
             }
             else
             {

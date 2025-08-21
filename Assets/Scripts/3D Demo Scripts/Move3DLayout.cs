@@ -17,8 +17,6 @@ public class Move3DLayout : MonoBehaviour
 
     private void OnClick(InputAction.CallbackContext context)
     {
-        Debug.Log("Clicked on the screen");
-
         Vector2 screenPosition = InputHandler.Instance.Point.ReadValue<Vector2>();
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
 
@@ -30,9 +28,9 @@ public class Move3DLayout : MonoBehaviour
 
                 GetComponent<FlexalonObject>()?.ForceUpdate();
             }
-            else
+            else if (hit.collider.CompareTag("Deck"))
             {
-                Debug.LogWarning("Clicked object is not a card.");
+                hit.collider.GetComponent<CardType_Color>()?.DeckPressed();
             }
         }
     }

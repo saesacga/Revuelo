@@ -35,7 +35,7 @@ public class Deck : NetworkBehaviour
     public void ChangeGameState(CardType_Color.CardColor color, CardType_Color.CardType type)
     {
         CreateCard(color, type);
-        CreateEnemyCardRpc(color, type);
+        //CreateEnemyCardRpc(color, type);
     }
 
     //Create cards for main player
@@ -49,12 +49,15 @@ public class Deck : NetworkBehaviour
             _ => throw new System.Exception("Unvalid cardprefab")
         };
 
-        GameObject cardInstance = Instantiate(_newCard, _handGrid);
+        GameObject cardInstance = Instantiate(_newCard, transform.GetChild(0));
+        cardInstance.transform.SetParent(_handGrid);
+        int lastIndex = _handGrid.childCount - 2;
+        cardInstance.transform.SetSiblingIndex(lastIndex);
         cardInstance.GetComponent<BaseCard>().Initialize(color);
     }
 
     //Create reverse cards for other players
-    [Rpc(SendTo.ClientsAndHost)]
+    /*[Rpc(SendTo.ClientsAndHost)]
     private void CreateEnemyCardRpc(CardType_Color.CardColor color, CardType_Color.CardType type)
     {
         GameObject enemyCardInstance = Instantiate(_reverseCardPrefab, EnemiesGrid[0]);
@@ -68,5 +71,5 @@ public class Deck : NetworkBehaviour
         };
 
         enemyCardInstance.GetComponent<ReverseCard>().Initialize(color, reverseSprite);
-    }
+    }*/
 }

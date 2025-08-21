@@ -22,8 +22,8 @@ public abstract class BaseCard : MonoBehaviour
             _ => throw new System.Exception("Unvalid card color")
         };
 
-        _button = GetComponentInChildren<Button>();
-        _button.onClick.AddListener(UseCard);
+        //_button = GetComponentInChildren<Button>();
+        //_button.onClick.AddListener(UseCard);
 
         OnInitialize();
     }

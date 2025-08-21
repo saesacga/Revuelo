@@ -3,8 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using Unity.Netcode;
+using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Button))]
 public class CardType_Color : NetworkBehaviour
 {
     public enum CardType { Attack, Recruit, Defense }
@@ -13,23 +13,22 @@ public class CardType_Color : NetworkBehaviour
     [SerializeField] private CardColor _cardColor;
     private CardType _cardType;
     public static event Action<CardColor, CardType> OnDeckButtonPressed;
-    private Button _button;
     private Deck _deck;
-    private Image _reverseType;
+    [SerializeField] private Image _reverseType;
 
     private void Awake()
     {
         _deck = GetComponentInParent<Deck>();
-
-        _reverseType = transform.GetComponentsInChildren<Image>().FirstOrDefault(img => img.gameObject != this.gameObject);
-
-        _button = GetComponent<Button>();
-        _button.onClick.AddListener(() => { OnDeckButtonPressed?.Invoke(_cardColor, _cardType); ChangeCardType(); });
     }
 
     private void Start()
     {
         ChangeCardType();
+    }
+
+    public void DeckPressed()
+    {
+        OnDeckButtonPressed?.Invoke(_cardColor, _cardType); ChangeCardType();      
     }
 
     private void ChangeCardType()
@@ -50,6 +49,7 @@ public class CardType_Color : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     private void ChangeCardTypeRpc(CardType type)
     {
+        Debug.Log("Card type changed to: " + type.ToString());
         _reverseType.sprite = type switch
         {
             CardType.Attack => _deck.TypeImages[0],

@@ -9,9 +9,11 @@ public class InputHandler : MonoBehaviour
 
     private InputAction _interact;
     private InputAction _point;
+    private InputAction _test;
 
     public InputAction Interact => _interact;
     public InputAction Point => _point;
+    public InputAction Test => _test;
 
     private void OnEnable()
     {
@@ -34,5 +36,6 @@ public class InputHandler : MonoBehaviour
 
         _interact = _inputActionAsset.FindAction("Interact");
         _point = _inputActionAsset.FindAction("Point");
+        _test = _inputActionAsset.FindAction("Test");
     }
 }

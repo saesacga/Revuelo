@@ -783,7 +783,7 @@ GameObject:
   - component: {fileID: 8808799019900550987}
   - component: {fileID: 5317940516794178084}
   - component: {fileID: 8300388393367801614}
-  - component: {fileID: 1580596272589845196}
+  - component: {fileID: 8299401174059034434}
   m_Layer: 0
   m_Name: BaseRecCard
   m_TagString: Card
@@ -966,7 +966,7 @@ MonoBehaviour:
   _animatePosition: 1
   _animateRotation: 1
   _animateScale: 1
---- !u!114 &1580596272589845196
+--- !u!114 &8299401174059034434
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -975,7 +975,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8682420188156141386}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 529406aa5deee0e4da8f2cc23fdf64e8, type: 3}
+  m_Script: {fileID: 11500000, guid: 868eaa9f177d5ce4b86b1c8c098f05fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _frame: {fileID: 2094190619861992483}
+  _reverseBG: {fileID: 4792797953993640993}

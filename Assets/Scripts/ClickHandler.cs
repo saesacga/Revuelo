@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Flexalon;
-public class Move3DLayout : MonoBehaviour
+public class ClickHandler : MonoBehaviour
 {
     [SerializeField] private Transform _newParent;
 

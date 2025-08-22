@@ -6,7 +6,7 @@ public abstract class BaseCard : MonoBehaviour
     private int _numberToGet;
 
     [SerializeField] private Image _frame;
-    private Button _button;
+    [SerializeField] private Image _reverseBG;
 
     protected abstract void OnInitialize();
     protected abstract void PositiveEffect();
@@ -14,22 +14,16 @@ public abstract class BaseCard : MonoBehaviour
 
     public void Initialize(CardType_Color.CardColor color)
     {
-        _frame.color = color switch
+        var cardColor = color switch
         {
             CardType_Color.CardColor.Green => Color.green,
             CardType_Color.CardColor.Orange => Color.yellow,
             CardType_Color.CardColor.Red => Color.red,
             _ => throw new System.Exception("Unvalid card color")
         };
-
-        //_button = GetComponentInChildren<Button>();
-        //_button.onClick.AddListener(UseCard);
+        _frame.color = cardColor;
+        _reverseBG.color = cardColor;
 
         OnInitialize();
-    }
-
-    protected void UseCard()
-    {
-        Destroy(this.gameObject);
     }
 }

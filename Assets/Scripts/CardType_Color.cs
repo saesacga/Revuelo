@@ -1,9 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 using Unity.Netcode;
-using UnityEngine.InputSystem;
 
 public class CardType_Color : NetworkBehaviour
 {
@@ -12,7 +10,7 @@ public class CardType_Color : NetworkBehaviour
 
     [SerializeField] private CardColor _cardColor;
     private CardType _cardType;
-    public static event Action<CardColor, CardType> OnDeckButtonPressed;
+    public static event Action<CardColor, CardType, RpcParams> OnDeckButtonPressed;
     private Deck _deck;
     [SerializeField] private Image _reverseType;
 
@@ -28,7 +26,7 @@ public class CardType_Color : NetworkBehaviour
 
     public void DeckPressed()
     {
-        OnDeckButtonPressed?.Invoke(_cardColor, _cardType); ChangeCardType();      
+        OnDeckButtonPressed?.Invoke(_cardColor, _cardType, default); ChangeCardType();      
     }
 
     private void ChangeCardType()
@@ -49,7 +47,6 @@ public class CardType_Color : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     private void ChangeCardTypeRpc(CardType type)
     {
-        Debug.Log("Card type changed to: " + type.ToString());
         _reverseType.sprite = type switch
         {
             CardType.Attack => _deck.TypeImages[0],

@@ -8,25 +8,35 @@ public class CardType_Color : NetworkBehaviour
     public enum CardType { Attack, Recruit, Defense }
     public enum CardColor { Green, Orange, Red }
 
-    [SerializeField] private CardColor _cardColor;
     private CardType _cardType;
-    public static event Action<CardColor, CardType, RpcParams> OnDeckButtonPressed;
-    private Deck _deck;
-    [SerializeField] private Image _reverseType;
+    [SerializeField] [field: ReadOnly] private CardColor _cardColor;
+    
+    [SerializeField] [field: ReadOnly] private Image _reverseType;
 
-    private void Awake()
-    {
-        _deck = GetComponentInParent<Deck>();
-    }
-
-    private void Start()
+    private void Start() //Check it, start doesn't work the same with NGO
     {
         ChangeCardType();
     }
 
     public void DeckPressed()
     {
-        OnDeckButtonPressed?.Invoke(_cardColor, _cardType, default); ChangeCardType();      
+        SpawnCardServerRpc();
+        ChangeCardType();
+    }
+    
+    [Rpc(SendTo.Server, RequireOwnership = false)]
+    private void SpawnCardServerRpc(RpcParams rpcParams = default)
+    {
+        if (!IsServer) return;
+
+        ulong ownerId = rpcParams.Receive.SenderClientId;
+
+        GameObject cardNetworkDataInstance = Instantiate(CardHandler.Instance.CardNetworkDataPrefab);
+       
+        cardNetworkDataInstance.GetComponent<CardNetworkData>().CardTypeValueRef = _cardType;
+        cardNetworkDataInstance.GetComponent<CardNetworkData>().CardColorValueRef = _cardColor;
+
+        cardNetworkDataInstance.GetComponent<NetworkObject>().SpawnWithOwnership(ownerId);    
     }
 
     private void ChangeCardType()
@@ -49,9 +59,9 @@ public class CardType_Color : NetworkBehaviour
     {
         _reverseType.sprite = type switch
         {
-            CardType.Attack => _deck.TypeImages[0],
-            CardType.Defense => _deck.TypeImages[1],
-            CardType.Recruit => _deck.TypeImages[2],
+            CardType.Attack => CardHandler.Instance.TypeImages[0],
+            CardType.Defense => CardHandler.Instance.TypeImages[1],
+            CardType.Recruit => CardHandler.Instance.TypeImages[2],
             _ => throw new Exception("Unvalid card type")
         };
     }

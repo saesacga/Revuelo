@@ -3,13 +3,12 @@ using UnityEngine;
 
 public class CardNetworkData : NetworkBehaviour
 {
-    [field: SerializeField] [field: ReadOnly] public GameObject VisualCardPrefabRef { get; set; }
+    private GameObject _visualCardPrefabRef;
 
     public CardType_Color.CardColor CardColorValueRef { get; set; }
     public CardType_Color.CardType CardTypeValueRef { get; set; }
-
-    [field: SerializeField] [field: ReadOnly] private NetworkVariable<CardType_Color.CardType> _cardType = new NetworkVariable<CardType_Color.CardType>(); //Change for [SerializeField, ReadOnly] or [SerializeField] [ReadOnly]
-    [field: SerializeField] [field: ReadOnly] private NetworkVariable<CardType_Color.CardColor> _cardColor = new NetworkVariable<CardType_Color.CardColor>();
+    [SerializeField, ReadOnly] private NetworkVariable<CardType_Color.CardType> _cardType = new NetworkVariable<CardType_Color.CardType>();
+    [SerializeField, ReadOnly] private NetworkVariable<CardType_Color.CardColor> _cardColor = new NetworkVariable<CardType_Color.CardColor>();
 
     public override void OnNetworkSpawn()
     {
@@ -39,7 +38,9 @@ public class CardNetworkData : NetworkBehaviour
 
         cardInstance.GetComponent<BaseCard>().Initialize(_cardColor.Value);
 
-        VisualCardPrefabRef = cardInstance;
+        cardInstance.GetComponent<BaseCard>().CardNetworkDataInstance = gameObject;
+
+        _visualCardPrefabRef = cardInstance;
     }
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
@@ -47,5 +48,12 @@ public class CardNetworkData : NetworkBehaviour
     {
         _cardType.Value = CardTypeValueRef;
         _cardColor.Value = CardColorValueRef;
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void UseNetworkCardRpc()
+    {
+        if (_visualCardPrefabRef == null) return;
+        _visualCardPrefabRef.transform.SetParent(CardHandler.Instance.DiscardPile);
     }
 }

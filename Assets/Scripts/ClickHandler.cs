@@ -1,9 +1,18 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Flexalon;
-public class ClickHandler : MonoBehaviour
+
+public class ClickHandler : MonoBehaviour 
 {
-    [SerializeField] private Transform _newParent;
+    #region Singleton
+    public static ClickHandler Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+
+        Instance = this;
+    }
+    #endregion
 
     private void Start()
     {
@@ -20,17 +29,11 @@ public class ClickHandler : MonoBehaviour
         Vector2 screenPosition = InputHandler.Instance.Point.ReadValue<Vector2>();
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit) && NetworkHandler.Instance.MyTurn)
         {
-            if (hit.collider.CompareTag("Card"))
+            if (hit.collider.TryGetComponent<IClickable>(out var clickable))
             {
-                hit.collider.transform.SetParent(_newParent, true);
-
-                GetComponent<FlexalonObject>()?.ForceUpdate();
-            }
-            else if (hit.collider.CompareTag("Deck"))
-            {
-                hit.collider.GetComponent<CardType_Color>()?.DeckPressed();
+                clickable.OnClick();
             }
         }
     }

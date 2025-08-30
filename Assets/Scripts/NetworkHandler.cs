@@ -44,7 +44,7 @@ public class NetworkHandler : NetworkBehaviour
         if (!ClientIds.Contains(clientId))
         {
             ClientIds.Add(clientId);
-            Debug.Log($"[SERVER] Cliente conectado: {clientId}");
+            //Debug.Log($"[SERVER] Cliente conectado: {clientId}");
         }
     }
     private void OnClientDisconnected(ulong clientId)
@@ -54,7 +54,22 @@ public class NetworkHandler : NetworkBehaviour
         if (ClientIds.Contains(clientId))
         {
             ClientIds.Remove(clientId);
-            Debug.Log($"[SERVER] Cliente desconectado: {clientId}");
+            //Debug.Log($"[SERVER] Cliente desconectado: {clientId}");
         }
+    }
+
+    private int _currentTurnIndex;
+    private bool _myTurn = true;
+    public bool MyTurn => _myTurn;
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void EndTurnRpc()
+    {
+        if (_currentTurnIndex < ClientIds.Count - 1) { _currentTurnIndex++; }
+        else { _currentTurnIndex = 0; }
+
+        int myIndex = ClientIds.IndexOf(NetworkManager.Singleton.LocalClientId);
+
+        _myTurn = myIndex == _currentTurnIndex;
     }
 }

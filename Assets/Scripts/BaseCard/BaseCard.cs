@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Netcode;
 
-public abstract class BaseCard : MonoBehaviour
+public abstract class BaseCard : MonoBehaviour, IClickable
 {
     private int _numberToGet;
 
-    [SerializeField] private Image _frame;
-    [SerializeField] private Image _reverseBG;
+    public GameObject CardNetworkDataInstance { get; set; }
+
+    [SerializeField, ReadOnly] private Image _frame;
+    [SerializeField, ReadOnly] private Image _reverseBG;
 
     protected abstract void OnInitialize();
     protected abstract void PositiveEffect();
@@ -25,5 +28,21 @@ public abstract class BaseCard : MonoBehaviour
         _reverseBG.color = cardColor;
 
         OnInitialize();
+    }
+
+    public void OnClick()
+    {
+        NetworkObject netObj = CardNetworkDataInstance.GetComponent<NetworkObject>();
+
+        if (netObj != null && netObj.IsOwner) //Prevents clients from using other players cards 
+        {
+            UseCard();
+        }
+    }
+
+    public void UseCard()
+    {
+        CardNetworkDataInstance.GetComponent<CardNetworkData>().UseNetworkCardRpc();
+        NetworkHandler.Instance.EndTurnRpc();
     }
 }

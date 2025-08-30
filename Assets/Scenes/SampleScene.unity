@@ -846,7 +846,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  _cardColor: 2
+  <LocalColor>k__BackingField: 2
+  Type:
+    m_InternalValue: 0
   _reverseType: {fileID: 1206662123}
 --- !u!1 &310724565
 GameObject:
@@ -1176,7 +1178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2dec12e5942717469c8b5420c445561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _newParent: {fileID: 1115055245}
 --- !u!1 &570921605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1226,6 +1227,7 @@ MonoBehaviour:
   - {fileID: 1612960970}
   - {fileID: 174348923084278925}
   - {fileID: 138110184}
+  <DiscardPile>k__BackingField: {fileID: 1115055245}
   <TypeImages>k__BackingField:
   - {fileID: 21300000, guid: c4e88886988ff09468d8da60a4edacb9, type: 3}
   - {fileID: 21300000, guid: 8aac615a02444404e8eefe564e658382, type: 3}
@@ -2235,7 +2237,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  _cardColor: 1
+  <LocalColor>k__BackingField: 1
+  Type:
+    m_InternalValue: 0
   _reverseType: {fileID: 738158713}
 --- !u!1 &1584731011
 GameObject:
@@ -2289,7 +2293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1613272970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3481,7 +3485,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  _cardColor: 0
+  <LocalColor>k__BackingField: 0
+  Type:
+    m_InternalValue: 0
   _reverseType: {fileID: 2358941205470864244}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

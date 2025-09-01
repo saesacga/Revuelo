@@ -15,7 +15,7 @@ public abstract class BaseCard : MonoBehaviour, IClickable
     protected abstract void PositiveEffect();
     protected abstract void NegativeEffect();
 
-    public void Initialize(CardType_Color.CardColor color)
+    public void Initialize(CardType_Color.CardColor color, int seat, GameObject cardNetworkData)
     {
         var cardColor = color switch
         {
@@ -26,6 +26,12 @@ public abstract class BaseCard : MonoBehaviour, IClickable
         };
         _frame.color = cardColor;
         _reverseBG.color = cardColor;
+
+        transform.SetParent(CardHandler.Instance.SeatGrids[seat]); //Set new card parent to local player grid
+        int lastIndex = CardHandler.Instance.SeatGrids[seat].childCount - 2;
+        transform.SetSiblingIndex(lastIndex); //Change the position in hierarchy so cards instantiate in the middle of the hand
+
+        CardNetworkDataInstance = cardNetworkData;
 
         OnInitialize();
     }

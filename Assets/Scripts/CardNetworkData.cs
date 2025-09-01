@@ -14,14 +14,7 @@ public class CardNetworkData : NetworkBehaviour
     {
         SetCardDataRpc();
 
-        NetworkList<ulong> players = NetworkHandler.Instance.ClientIds;
-        ulong myId = NetworkManager.Singleton.LocalClientId;
-
-        int myIndex = players.IndexOf(myId);
-        int ownerIndex = players.IndexOf(GetComponent<NetworkObject>().OwnerClientId);
-        int count = players.Count;
-
-        int seatIndex = (ownerIndex - myIndex + count) % count;
+        int seat = NetworkHandler.Instance.PlayerSeats[GetComponent<NetworkObject>().OwnerClientId]; //Pick local seat for each card based on owner
 
         var newCard = _cardType.Value switch //Check which card type to use
         {
@@ -32,14 +25,9 @@ public class CardNetworkData : NetworkBehaviour
         };
 
         GameObject cardInstance = Instantiate(newCard); //Create new card
-        cardInstance.transform.SetParent(CardHandler.Instance.SeatGrids[seatIndex]); //Set new card parent to local player grid
-        int lastIndex = CardHandler.Instance.SeatGrids[seatIndex].childCount - 2;
-        cardInstance.transform.SetSiblingIndex(lastIndex); //Change the position in hierarchy so cards instantiate in the middle of the hand
 
-        cardInstance.GetComponent<BaseCard>().Initialize(_cardColor.Value);
-
-        cardInstance.GetComponent<BaseCard>().CardNetworkDataInstance = gameObject;
-
+        cardInstance.GetComponent<BaseCard>().Initialize(_cardColor.Value, seat, gameObject);
+        
         _visualCardPrefabRef = cardInstance;
     }
 

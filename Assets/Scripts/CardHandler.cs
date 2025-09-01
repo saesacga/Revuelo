@@ -23,6 +23,4 @@ public class CardHandler : MonoBehaviour
     [field: SerializeField] public GameObject[] BaseAtkPrefabs { get; private set; }
     [field: SerializeField] public GameObject[] BaseDefPrefabs { get; private set; }
     [field: SerializeField] public GameObject[] BaseRecPrefabs { get; private set; }
-
-    
 }

@@ -2,6 +2,9 @@ using Unity.Netcode;
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// Acts as Game General Manager, sets general systems such as turns, seats, etc.
+/// </summary>
 public class NetworkHandler : NetworkBehaviour
 {
     public static NetworkHandler Instance { get; private set; }
@@ -68,12 +71,12 @@ public class NetworkHandler : NetworkBehaviour
         int count = ClientIds.Count;
         int localIndex = ClientIds.IndexOf(NetworkManager.Singleton.LocalClientId);
 
-        foreach (ulong element in ClientIds)
+        foreach (ulong playerId in ClientIds)
         {
-            int playerIndex = ClientIds.IndexOf(element);
+            int playerIndex = ClientIds.IndexOf(playerId);
             int seatIndex = (playerIndex - localIndex + count) % count;
 
-            _playerSeats[element] = seatIndex;
+            _playerSeats[playerId] = seatIndex;
         }
 
         Debug.Log("Seats Assigned");

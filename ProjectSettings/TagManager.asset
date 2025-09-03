@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Card
   - Deck
+  - Cinemachine Camera
   layers:
   - Default
   - TransparentFX

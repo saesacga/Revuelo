@@ -14,19 +14,24 @@ public class CardNetworkData : NetworkBehaviour
     {
         SetCardDataRpc();
 
-        int seat = NetworkHandler.Instance.PlayerSeats[GetComponent<NetworkObject>().OwnerClientId]; //Pick local seat for each card based on owner
+        int seat = NetworkHandler.Instance.PlayerSeats[GetComponent<NetworkObject>().OwnerClientId]; //Pick a local seat for each card based on an owner
+        
+        GameObject cardInstance = Instantiate(CardHandler.Instance.BaseCardPrefab); //Create a new card
 
-        var newCard = _cardType.Value switch //Check which card type to use
+        switch (_cardType.Value)
         {
-            CardType_Color.CardType.Attack => CardHandler.Instance.BaseAtkPrefabs[0],
-            CardType_Color.CardType.Defense => CardHandler.Instance.BaseDefPrefabs[0],
-            CardType_Color.CardType.Recruit => CardHandler.Instance.BaseRecPrefabs[0],
-            _ => throw new System.Exception("Unvalid cardprefab")
-        };
+            case CardType_Color.CardType.Attack:
+                cardInstance.AddComponent<BaseAtkCardV1>();
+                break;
+            case CardType_Color.CardType.Defense:
+                cardInstance.AddComponent<BaseDefV1>();
+                break;
+            case CardType_Color.CardType.Recruit:
+                cardInstance.AddComponent<BaseRecV1>();
+                break;
+        }
 
-        GameObject cardInstance = Instantiate(newCard); //Create new card
-
-        cardInstance.GetComponent<BaseCard>().Initialize(_cardColor.Value, seat, gameObject);
+        cardInstance.GetComponent<BaseCard>().Initialize(_cardColor.Value, _cardType.Value, seat, gameObject);
         
         _visualCardPrefabRef = cardInstance;
     }

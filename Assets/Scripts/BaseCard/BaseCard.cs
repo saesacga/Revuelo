@@ -1,31 +1,51 @@
 using UnityEngine;
-using UnityEngine.UI;
 using Unity.Netcode;
 
 public abstract class BaseCard : MonoBehaviour, IClickable
-{
-    private int _numberToGet;
-
-    public GameObject CardNetworkDataInstance { get; set; }
-
-    [SerializeField, ReadOnly] private Image _frame;
-    [SerializeField, ReadOnly] private Image _reverseBG;
-
+{ 
+    private GameObject CardNetworkDataInstance { get; set; }
+    
     protected abstract void OnInitialize();
     protected abstract void PositiveEffect();
     protected abstract void NegativeEffect();
-
-    public void Initialize(CardType_Color.CardColor color, int seat, GameObject cardNetworkData)
+    
+    protected CardType_Color.CardColor CardColor;
+    
+    protected BaseCardData CardData;
+    private void OnEnable()
     {
+        CardData = GetComponent<BaseCardData>();
+    }
+
+    public void Initialize(CardType_Color.CardColor color, CardType_Color.CardType type, int seat, GameObject cardNetworkData)
+    {
+        CardColor = color;
+        
+        CardData.CardTypeFront.sprite = type switch
+        {
+            CardType_Color.CardType.Attack => CardHandler.Instance.TypeImages[3],
+            CardType_Color.CardType.Defense => CardHandler.Instance.TypeImages[4],
+            CardType_Color.CardType.Recruit => CardHandler.Instance.TypeImages[5],
+            _ => throw new System.Exception("Invalid card type")
+        };
+        CardData.CardTypeBack.sprite = type switch
+        {
+            CardType_Color.CardType.Attack => CardHandler.Instance.TypeImages[0],
+            CardType_Color.CardType.Defense => CardHandler.Instance.TypeImages[1],
+            CardType_Color.CardType.Recruit => CardHandler.Instance.TypeImages[2],
+            _ => throw new System.Exception("Invalid card type")
+        };
+        
         var cardColor = color switch
         {
             CardType_Color.CardColor.Green => Color.green,
             CardType_Color.CardColor.Orange => Color.yellow,
             CardType_Color.CardColor.Red => Color.red,
-            _ => throw new System.Exception("Unvalid card color")
+            _ => throw new System.Exception("Invalid card color")
         };
-        _frame.color = cardColor;
-        _reverseBG.color = cardColor;
+        
+        CardData.Frame.color = cardColor;
+        CardData.ReverseBg.color = cardColor;
 
         transform.SetParent(CardHandler.Instance.SeatGrids[seat]); //Set new card parent to local player grid
         int lastIndex = CardHandler.Instance.SeatGrids[seat].childCount - 2;
@@ -46,7 +66,7 @@ public abstract class BaseCard : MonoBehaviour, IClickable
         }
     }
 
-    public void UseCard()
+    private void UseCard()
     {
         CardNetworkDataInstance.GetComponent<CardNetworkData>().UseNetworkCardRpc();
         NetworkHandler.Instance.EndTurnRpc();

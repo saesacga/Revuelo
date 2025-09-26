@@ -23,7 +23,7 @@ public class CardType_Color : NetworkBehaviour, IClickable
         DeckPressed();
     }
 
-    public void DeckPressed()
+    private void DeckPressed()
     {
         SpawnCardServerRpc();
         GetRandomTypeRpc();
@@ -47,9 +47,7 @@ public class CardType_Color : NetworkBehaviour, IClickable
     [Rpc(SendTo.Server, RequireOwnership = false)]
     private void GetRandomTypeRpc()
     {
-        CardType[] cardtypes = (CardType[])Enum.GetValues(typeof(CardType));
-        int randomIndex = UnityEngine.Random.Range(0, cardtypes.Length);
-        Type.Value = cardtypes[randomIndex];
+        Type.Value = (CardType)UnityEngine.Random.Range(0, Enum.GetValues(typeof(CardType)).Length);
     
         ChangeCardTypeRpc(Type.Value);
     }
@@ -63,7 +61,7 @@ public class CardType_Color : NetworkBehaviour, IClickable
             CardType.Attack => CardHandler.Instance.TypeImages[0],
             CardType.Defense => CardHandler.Instance.TypeImages[1],
             CardType.Recruit => CardHandler.Instance.TypeImages[2],
-            _ => throw new Exception("Unvalid card type")
+            _ => throw new Exception("Invalid card type")
         };
     }
 }

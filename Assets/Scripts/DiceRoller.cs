@@ -3,13 +3,19 @@ using UnityEngine;
 
 public class DiceRoller : NetworkBehaviour, IClickable
 {
-    [SerializeField] private Transform[] _faceEmpties;
+    private Transform[] _faceEmpties;
     private Rigidbody _rb;
 
     private bool _isChecking;
 
     private void Awake()
     {
+        _faceEmpties = new Transform[transform.childCount];
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            _faceEmpties[i] = transform.GetChild(i);
+        }
+
         _rb = GetComponent<Rigidbody>();
     }
 
@@ -27,10 +33,11 @@ public class DiceRoller : NetworkBehaviour, IClickable
         }
     }
 
+    public NetworkVariable<int> DiceNumber = new NetworkVariable<int>();
+
     [Rpc(SendTo.Server, RequireOwnership = false)]
     private void GetTopFaceServerRpc()
     {
-        Transform bestFace = null;
         float bestDot = -1f;
         int faceNumber = -1;
 
@@ -42,13 +49,12 @@ public class DiceRoller : NetworkBehaviour, IClickable
             if (dot > bestDot)
             {
                 bestDot = dot;
-                bestFace = _faceEmpties[i];
                 faceNumber = i + 1;
             }
         }
 
-        Debug.Log($"Dice rolled {faceNumber}");
-        return;
+        DiceNumber.Value = faceNumber;
+        Debug.Log($"Dice rolled {DiceNumber.Value}");
     }
 
     public void OnClick()

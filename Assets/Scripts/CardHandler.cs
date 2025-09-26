@@ -15,12 +15,10 @@ public class CardHandler : MonoBehaviour
 
     [field: SerializeField] [field: ReadOnly] public GameObject CardNetworkDataPrefab { get; private set; }
 
-    [SerializeField] public Transform[] SeatGrids;
+    public Transform[] SeatGrids;
     [field: SerializeField] [field: ReadOnly] public Transform DiscardPile { get; private set; }
 
-    [field: SerializeField] [field: ReadOnly] public Sprite[] TypeImages { get; private set; }
+    [field: SerializeField] /*[field: ReadOnly]*/ public Sprite[] TypeImages { get; private set; }
 
-    [field: SerializeField] public GameObject[] BaseAtkPrefabs { get; private set; }
-    [field: SerializeField] public GameObject[] BaseDefPrefabs { get; private set; }
-    [field: SerializeField] public GameObject[] BaseRecPrefabs { get; private set; }
+    [field: SerializeField] public GameObject BaseCardPrefab { get; private set; }
 }

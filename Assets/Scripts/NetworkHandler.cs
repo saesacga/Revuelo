@@ -9,7 +9,7 @@ public class NetworkHandler : NetworkBehaviour
 {
     public static NetworkHandler Instance { get; private set; }
 
-    public NetworkList<ulong> ClientIds { get; private set; }
+    private NetworkList<ulong> _clientIds;
 
     private void Awake()
     {
@@ -21,7 +21,7 @@ public class NetworkHandler : NetworkBehaviour
 
         Instance = this;
 
-        ClientIds = new NetworkList<ulong>();
+        _clientIds = new NetworkList<ulong>();
     }
 
     private void OnEnable()
@@ -47,18 +47,18 @@ public class NetworkHandler : NetworkBehaviour
     {
         if (!IsServer) return;
 
-        if (!ClientIds.Contains(clientId))
+        if (!_clientIds.Contains(clientId))
         {
-            ClientIds.Add(clientId);
+            _clientIds.Add(clientId);
         }
     }
     private void OnClientDisconnected(ulong clientId)
     {
         if (!IsServer) return;
 
-        if (ClientIds.Contains(clientId))
+        if (_clientIds.Contains(clientId))
         {
-            ClientIds.Remove(clientId);
+            _clientIds.Remove(clientId);
         }
     }
 
@@ -68,12 +68,12 @@ public class NetworkHandler : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     private void AssignSeatsRpc()
     {
-        int count = ClientIds.Count;
-        int localIndex = ClientIds.IndexOf(NetworkManager.Singleton.LocalClientId);
+        int count = _clientIds.Count;
+        int localIndex = _clientIds.IndexOf(NetworkManager.Singleton.LocalClientId);
 
-        foreach (ulong playerId in ClientIds)
+        foreach (ulong playerId in _clientIds)
         {
-            int playerIndex = ClientIds.IndexOf(playerId);
+            int playerIndex = _clientIds.IndexOf(playerId);
             int seatIndex = (playerIndex - localIndex + count) % count;
 
             _playerSeats[playerId] = seatIndex;
@@ -89,10 +89,10 @@ public class NetworkHandler : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void EndTurnRpc()
     {
-        if (_currentTurnIndex < ClientIds.Count - 1) { _currentTurnIndex++; }
+        if (_currentTurnIndex < _clientIds.Count - 1) { _currentTurnIndex++; }
         else { _currentTurnIndex = 0; }
 
-        int myIndex = ClientIds.IndexOf(NetworkManager.Singleton.LocalClientId);
+        int myIndex = _clientIds.IndexOf(NetworkManager.Singleton.LocalClientId);
 
         _myTurn = myIndex == _currentTurnIndex;
     }

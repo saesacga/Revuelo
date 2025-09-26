@@ -1374,12 +1374,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c4e88886988ff09468d8da60a4edacb9, type: 3}
   - {fileID: 21300000, guid: 8aac615a02444404e8eefe564e658382, type: 3}
   - {fileID: 21300000, guid: bd5435a7d2652d14dbf3b3fd676ca3e7, type: 3}
-  <BaseAtkPrefabs>k__BackingField:
-  - {fileID: 8682420188156141386, guid: e2c85459e45b8a343b863bc915453d39, type: 3}
-  <BaseDefPrefabs>k__BackingField:
-  - {fileID: 8682420188156141386, guid: 9af9a94de49c69d409ead2dae71b0e8c, type: 3}
-  <BaseRecPrefabs>k__BackingField:
-  - {fileID: 8682420188156141386, guid: c75ffc8703c6bd3449945f96a5301b15, type: 3}
+  - {fileID: 21300000, guid: 101f986b5d4c3cc42b315d89c92411e6, type: 3}
+  - {fileID: 21300000, guid: 1e2672a1606894b4894b084981f9741c, type: 3}
+  - {fileID: 21300000, guid: aa713a6384c3e504c91a8dda2d18f686, type: 3}
+  <BaseCardPrefab>k__BackingField: {fileID: 8682420188156141386, guid: e2c85459e45b8a343b863bc915453d39, type: 3}
 --- !u!1 &663742321
 GameObject:
   m_ObjectHideFlags: 0
@@ -2484,27 +2482,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  _faceEmpties:
-  - {fileID: 1870266665971449951}
-  - {fileID: 3963143490392758323}
-  - {fileID: 9137858141409661797}
-  - {fileID: 2235610523220269522}
-  - {fileID: 8342786749642527618}
-  - {fileID: 1597987510933358073}
-  - {fileID: 383835592775086923}
-  - {fileID: 1531345822249680256}
-  - {fileID: 8719588986968216535}
-  - {fileID: 1060948179730822283}
-  - {fileID: 8812025953995456863}
-  - {fileID: 3918564009183372667}
-  - {fileID: 7532969341208291069}
-  - {fileID: 4758324926788056346}
-  - {fileID: 1906350862274125987}
-  - {fileID: 2304401107890198081}
-  - {fileID: 4311801227505519040}
-  - {fileID: 2585866237350609388}
-  - {fileID: 8902714574814055474}
-  - {fileID: 1811229809772874202}
+  DiceNumber:
+    m_InternalValue: 0
 --- !u!114 &1249602998
 MonoBehaviour:
   m_ObjectHideFlags: 0

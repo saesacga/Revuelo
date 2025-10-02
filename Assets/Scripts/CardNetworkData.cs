@@ -43,10 +43,31 @@ public class CardNetworkData : NetworkBehaviour
         _cardColor.Value = CardColorValueRef;
     }
 
+    [Rpc(SendTo.Server, RequireOwnership = false)] 
+    public void ChangeCardHandServerRpc(RpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+        bool senderIsOwner = clientId == OwnerClientId;
+        ChangeCardHandLocalRpc(clientId, senderIsOwner);
+    }
+    
     [Rpc(SendTo.ClientsAndHost)]
-    public void UseNetworkCardRpc()
+    private void ChangeCardHandLocalRpc(ulong clientId, bool senderIsOwner)
     {
         if (_visualCardPrefabRef == null) return;
-        _visualCardPrefabRef.transform.SetParent(CardHandler.Instance.DiscardPile);
+        if (senderIsOwner)
+        {
+            _visualCardPrefabRef.transform.SetParent(CardHandler.Instance.DiscardPile);
+            _visualCardPrefabRef.GetComponent<BaseCard>().CardUsed = true;
+            return;
+        }
+        
+        int seat = NetworkHandler.Instance.PlayerSeats[clientId];
+        
+        _visualCardPrefabRef.transform.SetParent(CardHandler.Instance.SeatGrids[seat]);
+        int lastIndex = CardHandler.Instance.SeatGrids[seat].childCount - 2;
+        _visualCardPrefabRef.transform.SetSiblingIndex(lastIndex);
+        
+        GetComponent<NetworkObject>().ChangeOwnership(clientId);
     }
 }

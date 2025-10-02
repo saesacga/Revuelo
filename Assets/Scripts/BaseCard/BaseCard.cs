@@ -56,11 +56,13 @@ public abstract class BaseCard : MonoBehaviour, IClickable
         OnInitialize();
     }
 
+    public bool CardUsed { get; set;}
+
     public void OnClick()
     {
         NetworkObject netObj = CardNetworkDataInstance.GetComponent<NetworkObject>();
 
-        if (netObj != null && netObj.IsOwner) //Prevents clients from using other players cards 
+        if (netObj != null && netObj.IsOwner && !CardUsed) //Prevents clients from using other players cards 
         {
             UseCard();
         }
@@ -68,7 +70,7 @@ public abstract class BaseCard : MonoBehaviour, IClickable
 
     private void UseCard()
     {
-        CardNetworkDataInstance.GetComponent<CardNetworkData>().UseNetworkCardRpc();
+        CardNetworkDataInstance.GetComponent<CardNetworkData>().ChangeCardHandServerRpc();
         NetworkHandler.Instance.EndTurnRpc();
     }
 }

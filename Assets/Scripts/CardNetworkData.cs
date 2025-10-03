@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CardNetworkData : NetworkBehaviour
 {
-    private GameObject _visualCardPrefabRef;
+    private BaseCard _visualBaseCardRef;
 
     public CardType_Color.CardColor CardColorValueRef { get; set; }
     public CardType_Color.CardType CardTypeValueRef { get; set; }
@@ -31,9 +31,9 @@ public class CardNetworkData : NetworkBehaviour
                 break;
         }
 
-        cardInstance.GetComponent<BaseCard>().Initialize(_cardColor.Value, _cardType.Value, seat, gameObject);
+        cardInstance.GetComponent<BaseCard>().Initialize(_cardColor.Value, _cardType.Value, seat, this);
         
-        _visualCardPrefabRef = cardInstance;
+        _visualBaseCardRef = cardInstance.GetComponent<BaseCard>();
     }
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
@@ -54,20 +54,29 @@ public class CardNetworkData : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     private void ChangeCardHandLocalRpc(ulong clientId, bool senderIsOwner)
     {
-        if (_visualCardPrefabRef == null) return;
+        if (_visualBaseCardRef == null) return;
+        
         if (senderIsOwner)
         {
-            _visualCardPrefabRef.transform.SetParent(CardHandler.Instance.DiscardPile);
-            _visualCardPrefabRef.GetComponent<BaseCard>().CardUsed = true;
+            _visualBaseCardRef.transform.SetParent(CardHandler.Instance.DiscardPile);
             return;
         }
         
+        //For stealing
+        
         int seat = NetworkHandler.Instance.PlayerSeats[clientId];
         
-        _visualCardPrefabRef.transform.SetParent(CardHandler.Instance.SeatGrids[seat]);
+        _visualBaseCardRef.transform.SetParent(CardHandler.Instance.SeatGrids[seat]); 
         int lastIndex = CardHandler.Instance.SeatGrids[seat].childCount - 2;
-        _visualCardPrefabRef.transform.SetSiblingIndex(lastIndex);
-        
-        GetComponent<NetworkObject>().ChangeOwnership(clientId);
+        _visualBaseCardRef.transform.SetSiblingIndex(lastIndex);
+
+        if (IsServer) GetComponent<NetworkObject>().ChangeOwnership(clientId);
+    }
+
+    public NetworkVariable<bool> CardDiscarded = new NetworkVariable<bool>();
+    [Rpc(SendTo.Server, RequireOwnership = false)]
+    public void CardDiscardedServerRpc(bool value)
+    {
+        CardDiscarded.Value = value;
     }
 }

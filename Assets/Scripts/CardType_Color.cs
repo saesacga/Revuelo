@@ -12,7 +12,9 @@ public class CardType_Color : NetworkBehaviour, IClickable
     [HideInInspector] public NetworkVariable<CardType> Type = new NetworkVariable<CardType>();
 
     [SerializeField] [field: ReadOnly] private Image _reverseType;
-
+    
+    public static bool CardPicked { get; set; }
+    
     public override void OnNetworkSpawn()
     {
         GetRandomTypeRpc();
@@ -20,13 +22,15 @@ public class CardType_Color : NetworkBehaviour, IClickable
 
     public void OnClick()
     {
-        DeckPressed();
+        if (CardPicked) return;
+        for (var i = 0; i < 3; i++) DeckPressed(); //DeckPressed();
     }
 
     private void DeckPressed()
     {
         SpawnCardServerRpc();
         GetRandomTypeRpc();
+        CardPicked = true;
     }
 
     [Rpc(SendTo.Server, RequireOwnership = false)]

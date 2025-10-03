@@ -1,15 +1,22 @@
 using Unity.Netcode;
+using System;
 using UnityEngine;
 
-public class DiceRoller : NetworkBehaviour, IClickable
+public class DiceRoller : NetworkBehaviour
 {
     private Transform[] _faceEmpties;
     private Rigidbody _rb;
 
     private bool _isChecking;
-
+    
+    public static DiceRoller Instance { get; private set; } //Singleton
+    
     private void Awake()
     {
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+
+        Instance = this;
+        
         _faceEmpties = new Transform[transform.childCount];
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -27,13 +34,13 @@ public class DiceRoller : NetworkBehaviour, IClickable
             _isChecking = true;
         }
 
-        if (_rb.IsSleeping() == false)
+        if (!_rb.IsSleeping())
         {
             _isChecking = false;
         }
     }
-
-    public NetworkVariable<int> DiceNumber = new NetworkVariable<int>();
+    
+    public event Action<int> OnDiceRolled;
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
     private void GetTopFaceServerRpc()
@@ -52,22 +59,22 @@ public class DiceRoller : NetworkBehaviour, IClickable
                 faceNumber = i + 1;
             }
         }
-
-        DiceNumber.Value = faceNumber;
-        Debug.Log($"Dice rolled {DiceNumber.Value}");
+        SentNumberRpc(faceNumber);
     }
-
-    public void OnClick()
+    
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SentNumberRpc(int number)
     {
-        RollDiceServerRpc();
+        Debug.Log($"Dice rolled {number}");
+        OnDiceRolled?.Invoke(number);
     }
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
-    private void RollDiceServerRpc()
+    public void RollDiceServerRpc()
     {
         if (!IsServer) return;
 
-        _rb.AddForce(new Vector3(Random.Range(-5f, 5f), Random.Range(8f, 12f), Random.Range(-5f, 5f)), ForceMode.Impulse);
-        _rb.AddTorque(Random.insideUnitSphere * Random.Range(5f, 10f), ForceMode.Impulse);
+        _rb.AddForce(new Vector3(UnityEngine.Random.Range(-5f, 5f), UnityEngine.Random.Range(8f, 12f), UnityEngine.Random.Range(-5f, 5f)), ForceMode.Impulse);
+        _rb.AddTorque(UnityEngine.Random.insideUnitSphere * UnityEngine.Random.Range(5f, 10f), ForceMode.Impulse);
     }
 }

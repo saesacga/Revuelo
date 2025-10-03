@@ -64,7 +64,7 @@ public class NetworkHandler : NetworkBehaviour
 
     private Dictionary<ulong, int> _playerSeats = new Dictionary<ulong, int>();
     public IReadOnlyDictionary<ulong, int> PlayerSeats => _playerSeats;
-
+    
     [Rpc(SendTo.ClientsAndHost)]
     private void AssignSeatsRpc()
     {
@@ -77,14 +77,11 @@ public class NetworkHandler : NetworkBehaviour
             int seatIndex = (playerIndex - localIndex + count) % count;
 
             _playerSeats[playerId] = seatIndex;
-        }
-
-        Debug.Log("Seats Assigned");
+        } 
     }
 
     private int _currentTurnIndex;
-    private bool _myTurn = true;
-    public bool MyTurn => _myTurn;
+    public bool MyTurn { get; private set; } = true;
 
     [Rpc(SendTo.ClientsAndHost)]
     public void EndTurnRpc()
@@ -93,7 +90,10 @@ public class NetworkHandler : NetworkBehaviour
         else { _currentTurnIndex = 0; }
 
         int myIndex = _clientIds.IndexOf(NetworkManager.Singleton.LocalClientId);
+        
+        CardType_Color.CardPicked = false;
+        BaseCard.UsedCard = false;
 
-        _myTurn = myIndex == _currentTurnIndex;
+        MyTurn = myIndex == _currentTurnIndex;
     }
 }

@@ -35,6 +35,7 @@ public class ClickHandler : MonoBehaviour
             {
                 clickable.OnClick();
             }
+            //if (hit.collider.TryGetComponent(out BaseCard baseCard)) CardHandler.Instance.BaseCard = baseCard;
         }
     }
 }

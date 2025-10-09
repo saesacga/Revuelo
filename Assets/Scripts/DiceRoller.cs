@@ -65,7 +65,7 @@ public class DiceRoller : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     private void SentNumberRpc(int number)
     {
-        Debug.Log($"Dice rolled {number}");
+        //Debug.Log($"Dice rolled {number}");
         OnDiceRolled?.Invoke(number);
     }
 

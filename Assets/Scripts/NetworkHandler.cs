@@ -32,7 +32,7 @@ public class NetworkHandler : NetworkBehaviour
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
         }
 
-        InputHandler.Instance.Test.performed += ctx => AssignSeatsRpc(); //Here only for testing, must be removed soon
+        InputHandler.Instance.Test.performed += ctx => AssignSeatsRpc(); //Here, only for testing, must be removed soon
     }
     private void OnDisable()
     {
@@ -78,6 +78,7 @@ public class NetworkHandler : NetworkBehaviour
 
             _playerSeats[playerId] = seatIndex;
         } 
+        Debug.Log("Seats assigned!");
     }
 
     private int _currentTurnIndex;

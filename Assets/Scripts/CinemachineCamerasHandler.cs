@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.InputSystem;
+using Sirenix.OdinInspector;
 
 public class CinemachineCamerasHandler : MonoBehaviour
 {

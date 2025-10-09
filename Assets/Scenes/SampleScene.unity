@@ -606,7 +606,10 @@ PrefabInstance:
     - {fileID: 2921430293332431578, guid: cf648440e6a578c44bb86e177204f216, type: 3}
     - {fileID: 4437912388069337854, guid: cf648440e6a578c44bb86e177204f216, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6659349575244286057, guid: cf648440e6a578c44bb86e177204f216, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 766931577}
   m_SourcePrefab: {fileID: 100100000, guid: cf648440e6a578c44bb86e177204f216, type: 3}
 --- !u!4 &138110184 stripped
 Transform:
@@ -865,6 +868,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -886,6 +891,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -1150,7 +1156,6 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
     m_Quality: 3
     m_FrameInfluence: 0.1
@@ -1158,6 +1163,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!114 &330585548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1329,6 +1335,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 570921606}
+  - component: {fileID: 570921608}
   - component: {fileID: 570921607}
   m_Layer: 0
   m_Name: CardHandler
@@ -1364,7 +1371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f57de546a11db6240adf7401017e9e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CardNetworkDataPrefab>k__BackingField: {fileID: 6712653513835773846, guid: f060e48788841c246829323392db2780, type: 3}
+  ShowTopMostFoldoutHeaderGroup: 1
   SeatGrids:
   - {fileID: 1612960970}
   - {fileID: 174348923084278925}
@@ -1377,7 +1384,33 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 101f986b5d4c3cc42b315d89c92411e6, type: 3}
   - {fileID: 21300000, guid: 1e2672a1606894b4894b084981f9741c, type: 3}
   - {fileID: 21300000, guid: aa713a6384c3e504c91a8dda2d18f686, type: 3}
-  <BaseCardPrefab>k__BackingField: {fileID: 8682420188156141386, guid: e2c85459e45b8a343b863bc915453d39, type: 3}
+  <CardPrefabs>k__BackingField:
+  - {fileID: 8682420188156141386, guid: e2c85459e45b8a343b863bc915453d39, type: 3}
+--- !u!114 &570921608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570921605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 2124659290
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &663742321
 GameObject:
   m_ObjectHideFlags: 0
@@ -1590,6 +1623,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 738158711}
   m_CullTransparentMesh: 1
+--- !u!1 &766931573 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6659349575244286057, guid: cf648440e6a578c44bb86e177204f216, type: 3}
+  m_PrefabInstance: {fileID: 138110183}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &766931577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766931573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 4276693924
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &790894601
 GameObject:
   m_ObjectHideFlags: 0
@@ -2143,6 +2206,7 @@ GameObject:
   - component: {fileID: 1115055243}
   - component: {fileID: 1115055242}
   - component: {fileID: 1115055246}
+  - component: {fileID: 1115055247}
   m_Layer: 0
   m_Name: DiscardPile
   m_TagString: Untagged
@@ -2316,6 +2380,31 @@ MonoBehaviour:
   _randomizeRotationZ: 1
   _rotationMinZ: -180
   _rotationMaxZ: 180
+--- !u!114 &1115055247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115055240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3644951765
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &1206662121
 GameObject:
   m_ObjectHideFlags: 0
@@ -2482,8 +2571,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  DiceNumber:
-    m_InternalValue: 0
 --- !u!114 &1249602998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2508,10 +2595,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132147969074669}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -2688,6 +2775,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2709,6 +2798,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -3767,6 +3857,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3788,6 +3880,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -3910,6 +4003,14 @@ PrefabInstance:
     - target: {fileID: 3362504359928336538, guid: cf648440e6a578c44bb86e177204f216, type: 3}
       propertyPath: AdapterBounds.m_Extent.z
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3380210780081364780, guid: cf648440e6a578c44bb86e177204f216, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2797373068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3380210780081364780, guid: cf648440e6a578c44bb86e177204f216, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 2314954412
       objectReference: {fileID: 0}
     - target: {fileID: 6659349575244286057, guid: cf648440e6a578c44bb86e177204f216, type: 3}
       propertyPath: m_Name
@@ -4112,6 +4213,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4133,6 +4236,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -4788,6 +4892,18 @@ PrefabInstance:
     - target: {fileID: 41109829708212470, guid: f5471eca2846dac4f970cea2c3b78993, type: 3}
       propertyPath: LayoutPosition.z
       value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 501514948028068113, guid: f5471eca2846dac4f970cea2c3b78993, type: 3}
+      propertyPath: EditorHovered
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3171338374679372915, guid: f5471eca2846dac4f970cea2c3b78993, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 844803986
+      objectReference: {fileID: 0}
+    - target: {fileID: 3171338374679372915, guid: f5471eca2846dac4f970cea2c3b78993, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1263550264
       objectReference: {fileID: 0}
     - target: {fileID: 3303338983751327845, guid: f5471eca2846dac4f970cea2c3b78993, type: 3}
       propertyPath: m_LocalScale.y

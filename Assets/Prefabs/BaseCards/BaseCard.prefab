@@ -272,16 +272,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2982690306900716459}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.1657}
-  m_LocalScale: {x: 0.019800002, y: 0.028199999, z: 0.006}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 3.456669}
+  m_LocalScale: {x: 3.3000007, y: 4.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 453668809403971448}
+  m_Father: {fileID: 1966033991427948680}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.7693217, y: 1.0305996}
+  m_AnchoredPosition: {x: 0.42793345, y: 0.6139984}
   m_SizeDelta: {x: 100.259, y: 101.194}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6842046292412948636
@@ -305,7 +305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.45513636, b: 0.80784315, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -516,7 +516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.5280256, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -681,7 +681,7 @@ GameObject:
   - component: {fileID: 4393485820515033529}
   - component: {fileID: 2358941205015067438}
   m_Layer: 5
-  m_Name: ReverseCardType
+  m_Name: "\U0001F53AReverseCardType"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -694,16 +694,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5230874888068746481}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.1664}
-  m_LocalScale: {x: 0.022200003, y: 0.030420003, z: 0.022200001}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 3.573334}
+  m_LocalScale: {x: 3.7000008, y: 5.0700006, z: 3.7000003}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 453668809403971448}
+  m_Father: {fileID: 1966033991427948680}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.7667537, y: 1.0269156}
+  m_AnchoredPosition: {x: -0.000028371811, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4393485820515033529
@@ -744,39 +744,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &7792467255879585470
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 453668809403971448}
-  m_Layer: 0
-  m_Name: Reverse
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &453668809403971448
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7792467255879585470}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: -461.12564, y: -171.1526, z: -24.16}
-  m_LocalScale: {x: 166.66667, y: 166.66667, z: 166.66667}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2434746663604264710}
-  - {fileID: 6197512611089482119}
-  m_Father: {fileID: 1966033991427948680}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7827806257428475174
 GameObject:
   m_ObjectHideFlags: 0
@@ -789,7 +756,7 @@ GameObject:
   - component: {fileID: 5019591845439560254}
   - component: {fileID: 899468762315497278}
   m_Layer: 5
-  m_Name: BaseCardType
+  m_Name: "\U0001F53ABaseCardType"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1021,7 +988,8 @@ RectTransform:
   - {fileID: 1570679413912137121}
   - {fileID: 6456000904540518022}
   - {fileID: 975077713520445380}
-  - {fileID: 453668809403971448}
+  - {fileID: 2434746663604264710}
+  - {fileID: 6197512611089482119}
   m_Father: {fileID: 5593711072591381186}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1084,12 +1052,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5593711072591381186}
+  - component: {fileID: 3113274325135611726}
+  - component: {fileID: -1563793039863609176}
   - component: {fileID: 8697766662101118113}
   - component: {fileID: 178634897453469025}
-  - component: {fileID: 8808799019900550987}
   - component: {fileID: 5317940516794178084}
+  - component: {fileID: 8808799019900550987}
   - component: {fileID: 8300388393367801614}
-  - component: {fileID: 7757353590779729989}
+  - component: {fileID: 8284223885865566006}
   m_Layer: 0
   m_Name: BaseCard
   m_TagString: Card
@@ -1113,6 +1083,44 @@ Transform:
   - {fileID: 1966033991427948680}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &3113274325135611726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8682420188156141386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1586021473
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 0
+  SyncOwnerTransformWhenParented: 0
+  AllowOwnerToParent: 0
+--- !u!114 &-1563793039863609176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8682420188156141386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4ba1c241fd624d47939f64c7b7429d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BaseCard
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!33 &8697766662101118113
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1141,6 +1149,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1162,31 +1172,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8808799019900550987
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8682420188156141386}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2, y: 3.0798254, z: 0.019222459}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5317940516794178084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1223,6 +1213,27 @@ MonoBehaviour:
   TransformRotation: {x: 0, y: 0, z: 0, w: 1}
   TransformScale: {x: 1, y: 1, z: 1}
   TransformRectSize: {x: 0, y: 0}
+--- !u!65 &8808799019900550987
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8682420188156141386}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 3.0798254, z: 0.019222459}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8300388393367801614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1272,7 +1283,7 @@ MonoBehaviour:
   _animatePosition: 1
   _animateRotation: 1
   _animateScale: 1
---- !u!114 &7757353590779729989
+--- !u!114 &8284223885865566006
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1283,7 +1294,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e79c64b5e4d39ad4cb99895f5dfe59ae, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::BaseCardData
   CardTypeFront: {fileID: 899468762315497278}
   CardTypeBack: {fileID: 2358941205015067438}
   Frame: {fileID: 2094190619861992483}

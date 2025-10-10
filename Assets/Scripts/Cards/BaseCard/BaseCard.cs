@@ -1,9 +1,8 @@
 using System;
-using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BaseCard : CardNetwork, IClickable
+public class BaseCard : CardNetwork
 {
     private BaseCardData _cardData;
     public int CardNumberToGet { get; set; }
@@ -54,26 +53,17 @@ public class BaseCard : CardNetwork, IClickable
         }
     }
     
-    public static bool UsedCard { get; set; }
-    public virtual void OnClick() 
-    { 
-        if (IsOwner && CardType_Color.CardPicked && !CardDiscarded.Value && !UsedCard) 
-            UseCardRpc();
-    }
-    
-    [Rpc(SendTo.ClientsAndHost)] 
-    private void UseCardRpc() 
-    { 
-        transform.SetParent(CardHandler.Instance.DiscardPile);
+    protected override void UseCardRpc()
+    {
+        base.UseCardRpc();
         
         if (!IsOwner) return;
         
         DiceRoller.Instance.OnDiceRolled += CardEffect; 
         DiceRoller.Instance.RollDiceServerRpc(); 
         CardDiscardedServerRpc(true); 
-        UsedCard = true;
     }
-    
+
     private void CardEffect(int diceValue)
     {
         if (diceValue >= CardNumberToGet)

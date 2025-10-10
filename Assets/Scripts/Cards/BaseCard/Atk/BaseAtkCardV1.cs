@@ -16,8 +16,6 @@ public class BaseAtkCardV1 : NetworkBehaviour, IPlayable
     
     private void OnEnable()
     {
-        Debug.Log("Attack here");
-
         var baseCard = GetComponent<BaseCard>();
         var cardData = GetComponent<BaseCardData>();
         

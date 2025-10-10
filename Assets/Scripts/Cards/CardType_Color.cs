@@ -1,10 +1,11 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
 
-public class CardType_Color : NetworkBehaviour, IClickable 
+public class CardType_Color : NetworkBehaviour, IPointerClickHandler
 { 
     public enum CardType { Attack, Recruit, Defense } 
     public enum CardColor { Green, Orange, Red }
@@ -21,10 +22,10 @@ public class CardType_Color : NetworkBehaviour, IClickable
         GetRandomTypeRpc(); 
     }
 
-    public void OnClick()
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (CardPicked) return;
-        for (var i = 0; i < 1; i++) DeckPressed(); //DeckPressed();
+        for (var i = 0; i < 6; i++) DeckPressed();
     }
 
     private void DeckPressed()

@@ -25,7 +25,7 @@ public class CardType_Color : NetworkBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         if (CardPicked) return;
-        for (var i = 0; i < 6; i++) DeckPressed();
+        for (var i = 0; i < 3; i++) DeckPressed();
     }
 
     private void DeckPressed()

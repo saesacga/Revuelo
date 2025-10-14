@@ -64,6 +64,8 @@ namespace Flexalon
         private Vector2 _startRectSize;
 
         private Vector3 _endPosition;
+        public Vector3 EndPosition => _endPosition;
+        
         private Quaternion _endRotation;
         private Vector3 _endScale;
         private Vector2 _endRectSize;
@@ -129,7 +131,7 @@ namespace Flexalon
             if (!_animatePosition || _positionTime > _curve.keys[_curve.keys.Length - 1].time)
             {
                 transform.localPosition = position;
-                _endPosition = new Vector3(float.NaN, float.NaN, float.NaN);
+                //_endPosition = new Vector3(float.NaN, float.NaN, float.NaN);
                 return true;
             }
             else

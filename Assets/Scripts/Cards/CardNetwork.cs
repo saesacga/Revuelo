@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler
 { 
     public CardType_Color.CardColor CardColorValueRef { get; set; }
     public CardType_Color.CardType CardTypeValueRef { get; set; }
@@ -14,9 +14,6 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler, IPoi
     protected CardType_Color.CardType CardType => _cardType.Value;
     public CardType_Color.CardColor CardColor => _cardColor.Value;
     
-    private Sequence _sequenceTween;
-    private Transform _visualTransform;
-        
     protected abstract void OnInitialize();
     
     public override void OnNetworkSpawn()
@@ -29,8 +26,6 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler, IPoi
         transform.SetSiblingIndex(lastIndex); //Change the position in hierarchy so cards instantiate in the middle of the hand
         
         OnInitialize();
-        
-        _visualTransform = transform.GetChild(0);
     }
 
     [Rpc(SendTo.Server, RequireOwnership = false)] private void SetCardDataRpc()
@@ -40,6 +35,7 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler, IPoi
     }
 
     private readonly NetworkVariable<bool> _cardDiscarded = new NetworkVariable<bool>();
+    public bool CardDiscarded => _cardDiscarded.Value;
     [Rpc(SendTo.Server, RequireOwnership = false)] protected void CardDiscardedServerRpc(bool value)
     {
         _cardDiscarded.Value = value;
@@ -57,47 +53,5 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler, IPoi
     {
         transform.SetParent(CardHandler.Instance.DiscardPile);
         UsedCard = true;
-    }
-    
-    private float _rotationTime = 0.1f;
-    private float _moveTime = 0.2f;
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (!IsOwner || !CardType_Color.CardPicked || _cardDiscarded.Value || UsedCard)
-            return;
-        
-        _sequenceTween?.Kill();
-        
-        _sequenceTween = DOTween.Sequence();
-        
-        _sequenceTween.Append(_visualTransform.DOLocalMove(new Vector3(0, 0.1f, 0.1f), _moveTime));
-        
-        _sequenceTween.Join(
-            DOTween.Sequence()
-                .Append(_visualTransform.DOLocalRotate(new Vector3(0, 60, 0), _rotationTime))
-                .Append(_visualTransform.DOLocalRotate(Vector3.zero, _rotationTime))
-            );
-        _sequenceTween.SetEase(Ease.InOutQuad);
-        _sequenceTween.Play();
-        
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (!IsOwner || !CardType_Color.CardPicked || _cardDiscarded.Value || UsedCard)
-            return;
-        
-        _sequenceTween?.Kill();
-        
-        _sequenceTween = DOTween.Sequence();
-
-        _sequenceTween.Append(_visualTransform.DOLocalMove(Vector3.zero, _moveTime));
-        _sequenceTween.Join(
-            DOTween.Sequence()
-                .Append(_visualTransform.DOLocalRotate(new Vector3(0, 60, 0), _rotationTime))
-                .Append(_visualTransform.DOLocalRotate(Vector3.zero, _rotationTime))
-        );
-        _sequenceTween.SetEase(Ease.InOutQuad);
-        _sequenceTween.Play();
     }
 }

@@ -60,8 +60,7 @@ public class BaseCard : CardNetwork
         if (!IsOwner) return;
         
         DiceRoller.Instance.OnDiceRolled += CardEffect; 
-        DiceRoller.Instance.RollDiceServerRpc(); 
-        CardDiscardedServerRpc(true); 
+        DiceRoller.Instance.RollDiceServerRpc();
     }
 
     private void CardEffect(int diceValue)

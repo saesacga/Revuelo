@@ -2241,7 +2241,7 @@ MonoBehaviour:
   _verticalInnerAlign: 0
   _depthInnerAlign: 0
   _gapType: 0
-  _gap: 0
+  _gap: 0.01
   _wrapGapType: 0
   _wrapGap: 0
 --- !u!114 &1115055243

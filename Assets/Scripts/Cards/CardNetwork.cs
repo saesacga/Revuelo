@@ -33,24 +33,22 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler
         _cardType.Value = CardTypeValueRef;
         _cardColor.Value = CardColorValueRef;
     }
-
-    private readonly NetworkVariable<bool> _cardDiscarded = new NetworkVariable<bool>();
-    public bool CardDiscarded => _cardDiscarded.Value;
-    [Rpc(SendTo.Server, RequireOwnership = false)] protected void CardDiscardedServerRpc(bool value)
-    {
-        _cardDiscarded.Value = value;
-    }
-
-    public static bool UsedCard { get; set; }
+    
     public void OnPointerClick(PointerEventData eventData)
     {
         if (IsOwner && CardType_Color.CardPicked && !_cardDiscarded.Value && !UsedCard) 
             UseCardRpc();
     }
 
+    private readonly NetworkVariable<bool> _cardDiscarded = new NetworkVariable<bool>();
+    public bool CardDiscarded => _cardDiscarded.Value;
+    public static bool UsedCard { get; set; }
+    
     [Rpc(SendTo.ClientsAndHost)]
     protected virtual void UseCardRpc()
     {
+        if(IsServer) _cardDiscarded.Value = true;
+        
         transform.SetParent(CardHandler.Instance.DiscardPile);
         UsedCard = true;
     }

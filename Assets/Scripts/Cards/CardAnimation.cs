@@ -15,7 +15,11 @@ public class CardAnimation : NetworkBehaviour, IPointerEnterHandler, IPointerExi
     
     private CardNetwork _cardNetwork;
     
-    private Vector3 _endPosition;
+    [SerializeField] private float _endPositionY = 0.1f;
+    [SerializeField] private float _endPositionZ = 0.2f;
+    [SerializeField] private float _scale = 1.1f;
+    [SerializeField] private float _siblingsReduction = 0.03f;
+    [SerializeField] private float _moveTime = 0.2f;
 
     private void Awake()
     {
@@ -24,33 +28,29 @@ public class CardAnimation : NetworkBehaviour, IPointerEnterHandler, IPointerExi
         _cardNetwork = GetComponent<CardNetwork>();
     }
 
-    private float _rotationTime = 0.1f;
-    private float _moveTime = 0.2f;
-    
+    private CardAnimation _left;
+    private CardAnimation _right;
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (!IsOwner || _cardNetwork.CardDiscarded)
             return;
         
-        _endPosition = GetComponent<FlexalonCurveAnimator>().EndPosition;
-        
-        var scale = new Vector3(1.1f, 1.1f, 1.1f);
-        
-        HoverToggle(new Vector3(_endPosition.x, _endPosition.y + 0.1f, _endPosition.z + 0.05f), scale);
+        var endPos = new Vector3(0, _endPositionY, _endPositionZ);
+        HoverToggle(endPos, _scale);
         
         _parent = transform.parent;
         _index = transform.GetSiblingIndex();
         
         if (_index > 1) //Check if there's a card in the left
         {
-            CardAnimation left = _parent.GetChild(_index - 1).GetComponent<CardAnimation>();
-            left.HoverToggle(new Vector3(left.transform.position.x, _endPosition.y + 0.05f, _endPosition.z + 0.03f), scale);
+            _left = _parent.GetChild(_index - 1).GetComponent<CardAnimation>();
+            _left.HoverToggle(endPos - (Vector3.one * _siblingsReduction), _scale - _siblingsReduction);
         }
 
         if (_index < _parent.childCount - 2) //Check if there's a card in the right
         {
-            CardAnimation right = _parent.GetChild(_index + 1).GetComponent<CardAnimation>();
-            right.HoverToggle(new Vector3(right.transform.position.x, _endPosition.y + 0.05f, _endPosition.z + 0.03f), scale);
+            _right = _parent.GetChild(_index + 1).GetComponent<CardAnimation>();
+            _right.HoverToggle(endPos - (Vector3.one * _siblingsReduction), _scale - _siblingsReduction);
         }
     }
 
@@ -59,39 +59,21 @@ public class CardAnimation : NetworkBehaviour, IPointerEnterHandler, IPointerExi
         if (!IsOwner || _cardNetwork.CardDiscarded)
             return;
         
-        HoverToggle(_endPosition, Vector3.one);
-        
-        _parent = transform.parent;
-        _index = transform.GetSiblingIndex();
-        
-        if (_index > 1) //Check if there's a card in the left
-        {
-            CardAnimation left = _parent.GetChild(_index - 1).GetComponent<CardAnimation>();
-            left.HoverToggle(left.GetComponent<FlexalonCurveAnimator>().EndPosition, Vector3.one);
-        }
-
-        if (_index < _parent.childCount - 2) //Check if there's a card in the right
-        {
-            CardAnimation right = _parent.GetChild(_index + 1).GetComponent<CardAnimation>();
-            right.HoverToggle(right.GetComponent<FlexalonCurveAnimator>().EndPosition, Vector3.one);
-        }
+        HoverToggle(Vector3.zero, 1);
+        _left?.HoverToggle(Vector3.zero, 1);
+        _right?.HoverToggle(Vector3.zero, 1);
     }
 
-    private void HoverToggle(Vector3 endPosition, Vector3 scale)
+    private void HoverToggle(Vector3 endPosition, float scale)
     {
-        _colliderTransform.position = endPosition;
-        _colliderTransform.localScale = scale;
+        _colliderTransform.localPosition = endPosition;
+        _colliderTransform.localScale = Vector3.one * scale;
         
         _sequenceTween?.Kill();
         _sequenceTween = DOTween.Sequence();
         
-        _sequenceTween.Append(_visualTransform.DOMove(endPosition, _moveTime));
-        _sequenceTween.Join(
-            DOTween.Sequence()
-                .Append(_visualTransform.DOLocalRotate(new Vector3(0, 60, 0), _rotationTime))
-                .Append(_visualTransform.DOLocalRotate(Vector3.zero, _rotationTime))
-        );
-        _sequenceTween.Join(_visualTransform.DOScale(scale, _moveTime));
+        _sequenceTween.Append(_visualTransform.DOLocalMove(endPosition, _moveTime));
+        _sequenceTween.Join(_visualTransform.DOScale(Vector3.one * scale, _moveTime));
         
         _sequenceTween.SetEase(Ease.InOutQuad);
         _sequenceTween.Play();

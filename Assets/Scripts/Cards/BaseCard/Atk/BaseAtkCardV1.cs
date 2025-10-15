@@ -14,6 +14,8 @@ public class BaseAtkCardV1 : NetworkBehaviour, IPlayable
     private NegativeAtkV1 _negativeAtk;
     private Target _target;
     
+    private CardEffects _cardEffects;
+    
     private void OnEnable()
     {
         var baseCard = GetComponent<BaseCard>();
@@ -44,6 +46,8 @@ public class BaseAtkCardV1 : NetworkBehaviour, IPlayable
         baseCard.CardNumberToGet = UnityEngine.Random.Range(2, 20);
         cardData.CardNumberUpText.text = $"{baseCard.CardNumberToGet}";
         cardData.CardNumberDownText.text = $"{baseCard.CardNumberToGet-1}";
+        
+        _cardEffects = GetComponent<CardEffects>();
     } 
     
     public void PositiveEffect()
@@ -51,19 +55,18 @@ public class BaseAtkCardV1 : NetworkBehaviour, IPlayable
         switch (_positiveAtk) 
         { 
             case PositiveAtkV1.Discard:
+                NetworkHandler.Instance.EndTurnServerRpc();
                 break;
-            case PositiveAtkV1.Steal: 
-                //Steal(quantity, target)
+            case PositiveAtkV1.Steal:
+                _cardEffects.StealRpc(_positiveQuantity);
                 break;
             default: 
                 throw new ArgumentOutOfRangeException();
         }
-
-        NetworkHandler.Instance.EndTurnRpc();
     }
     
     public void NegativeEffect() 
     { 
-        NetworkHandler.Instance.EndTurnRpc();
+        NetworkHandler.Instance.EndTurnServerRpc();
     }
 }

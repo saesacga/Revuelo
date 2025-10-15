@@ -1,4 +1,5 @@
 using System;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,6 +9,25 @@ public class BaseCard : CardNetwork
     public int CardNumberToGet { get; set; }
     
     protected override void OnInitialize()
+    {
+        SetCardVisuals();
+        switch (CardType)
+        { 
+            case CardType_Color.CardType.Attack:
+                transform.AddComponent<BaseAtkCardV1>();
+                break; 
+            case CardType_Color.CardType.Defense:
+                transform.AddComponent<BaseDefV1>(); 
+                break;
+            case CardType_Color.CardType.Recruit:
+                transform.AddComponent<BaseRecV1>();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private void SetCardVisuals()
     {
         _cardData = GetComponent<BaseCardData>();
         
@@ -36,26 +56,15 @@ public class BaseCard : CardNetwork
         
         _cardData.Frame.color = cardColor; 
         _cardData.ReverseBg.color = cardColor;
-
-        switch (CardType)
-        { 
-            case CardType_Color.CardType.Attack:
-                transform.AddComponent<BaseAtkCardV1>();
-                break; 
-            case CardType_Color.CardType.Defense:
-                transform.AddComponent<BaseDefV1>(); 
-                break;
-            case CardType_Color.CardType.Recruit:
-                transform.AddComponent<BaseRecV1>();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
     }
-    
+
+    [Rpc(SendTo.ClientsAndHost)]
     protected override void UseCardRpc()
     {
-        base.UseCardRpc();
+        if(IsServer) CardDiscarded.Value = true;
+        
+        transform.SetParent(CardHandler.Instance.DiscardPile);
+        UsedCard = true;
         
         if (!IsOwner) return;
         

@@ -1201,6 +1201,7 @@ GameObject:
   - component: {fileID: 8300388393367801614}
   - component: {fileID: 8284223885865566006}
   - component: {fileID: 7683371887316671958}
+  - component: {fileID: 3056429742794734104}
   m_Layer: 0
   m_Name: BaseCard
   m_TagString: Card
@@ -1237,7 +1238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1586021473
+  GlobalObjectIdHash: 2364200279
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1386,3 +1387,16 @@ MonoBehaviour:
   _scale: 1.1
   _siblingsReduction: 0.05
   _moveTime: 0.2
+--- !u!114 &3056429742794734104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8682420188156141386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dfd4bdd380ca574c8eca0f4eb714090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardEffects
+  ShowTopMostFoldoutHeaderGroup: 1

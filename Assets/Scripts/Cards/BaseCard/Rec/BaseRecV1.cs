@@ -5,11 +5,11 @@ public class BaseRecV1 : NetworkBehaviour, IPlayable
 { 
     public void PositiveEffect()
     {
-        NetworkHandler.Instance.EndTurnRpc();
+        NetworkHandler.Instance.EndTurnServerRpc();
     }
 
     public void NegativeEffect()
     {
-        NetworkHandler.Instance.EndTurnRpc();
+        NetworkHandler.Instance.EndTurnServerRpc();
     }
 }

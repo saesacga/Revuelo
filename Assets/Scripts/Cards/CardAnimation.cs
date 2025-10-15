@@ -32,7 +32,7 @@ public class CardAnimation : NetworkBehaviour, IPointerEnterHandler, IPointerExi
     private CardAnimation _right;
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (!IsOwner || _cardNetwork.CardDiscarded)
+        if (!IsOwner || _cardNetwork.CardDiscardedValue)
             return;
         
         var endPos = new Vector3(0, _endPositionY, _endPositionZ);
@@ -56,7 +56,7 @@ public class CardAnimation : NetworkBehaviour, IPointerEnterHandler, IPointerExi
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (!IsOwner || _cardNetwork.CardDiscarded)
+        if (!IsOwner || _cardNetwork.CardDiscardedValue)
             return;
         
         HoverToggle(Vector3.zero, 1);

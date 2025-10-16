@@ -68,8 +68,8 @@ public class BaseCard : CardNetwork
         
         if (!IsOwner) return;
         
-        DiceRoller.Instance.OnDiceRolled += CardEffect; 
-        DiceRoller.Instance.RollDiceServerRpc();
+        RouletteRoller.Instance.OnRouletteSpinned += CardEffect; 
+        RouletteRoller.Instance.SpinRouletteServerRpc();
     }
 
     private void CardEffect(int diceValue)
@@ -82,6 +82,6 @@ public class BaseCard : CardNetwork
         {
             GetComponent<IPlayable>().NegativeEffect();
         }
-        DiceRoller.Instance.OnDiceRolled -= CardEffect;
+        RouletteRoller.Instance.OnRouletteSpinned -= CardEffect;
     } 
 }

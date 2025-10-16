@@ -32,6 +32,7 @@ public class CardType_Color : NetworkBehaviour, IPointerClickHandler
     {
         SpawnCardServerRpc();
         GetRandomTypeRpc();
+        CentralZone.Instance.ChangeCentralZone(CentralZone.CentralZoneState.DiscardPile);
         CardPicked = true;
     }
 

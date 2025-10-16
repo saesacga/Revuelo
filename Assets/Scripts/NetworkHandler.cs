@@ -95,6 +95,8 @@ public class NetworkHandler : NetworkBehaviour
     {
         CardType_Color.CardPicked = false;
         CardNetwork.UsedCard = false;
+        
+        if (IsMyTurn) CentralZone.Instance.ChangeCentralZone(CentralZone.CentralZoneState.Deck);
     }
     
     #endregion

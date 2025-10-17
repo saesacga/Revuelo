@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,7 +9,7 @@ using Sirenix.OdinInspector;
 public class CardType_Color : NetworkBehaviour, IPointerClickHandler
 { 
     public enum CardType { Attack, Recruit, Defense } 
-    public enum CardColor { Green, Orange, Red }
+    public enum CardColor { Green, Orange, Red, Any }
 
     [field: SerializeField] [field: ReadOnly] public CardColor LocalColor { get; private set; }
     [HideInInspector] public NetworkVariable<CardType> Type = new NetworkVariable<CardType>();
@@ -25,7 +26,7 @@ public class CardType_Color : NetworkBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         if (CardPicked || !NetworkHandler.Instance.IsMyTurn) return;
-        for (var i = 0; i < 3; i++) DeckPressed();
+        for (var i = 0; i < 5; i++) DeckPressed();
     }
 
     private void DeckPressed()
@@ -42,12 +43,26 @@ public class CardType_Color : NetworkBehaviour, IPointerClickHandler
 
         ulong ownerId = rpcParams.Receive.SenderClientId;
         
-        GameObject cardNetworkInstance = Instantiate(CardHandler.Instance.CardPrefabs[UnityEngine.Random.Range(0, CardHandler.Instance.CardPrefabs.Length)]);
+        var sourceArray = Type.Value switch
+        {
+            CardType.Attack => CardHandler.Instance.AttackCardPrefabs,
+            CardType.Recruit => CardHandler.Instance.RecruitCardPrefabs,
+            CardType.Defense => CardHandler.Instance.DefenseCardPrefabs,
+            _ => throw new Exception("Invalid card type") 
+        };
+
+        // Filtrar por color
+        var filtered = sourceArray.Where(c =>
+            {
+                var card = c.GetComponent<CardNetwork>();
+                return card != null && (card.ValueCardColor == LocalColor || card.ValueCardColor == CardColor.Any);
+            }).ToArray();
         
-        cardNetworkInstance.GetComponent<CardNetwork>().CardTypeValueRef = Type.Value; 
-        cardNetworkInstance.GetComponent<CardNetwork>().CardColorValueRef = LocalColor;
+        var cardNetworkInstance = Instantiate(filtered[UnityEngine.Random.Range(0, filtered.Length)]).GetComponent<CardNetwork>();
         
-        cardNetworkInstance.GetComponent<NetworkObject>().SpawnWithOwnership(ownerId); 
+        if (cardNetworkInstance.ValueCardColor == CardColor.Any) cardNetworkInstance.ValueCardColor = LocalColor;
+        
+        cardNetworkInstance.GetComponent<NetworkObject>().SpawnWithOwnership(ownerId);
     }
 
     [Rpc(SendTo.Server, RequireOwnership = false)] private void GetRandomTypeRpc()

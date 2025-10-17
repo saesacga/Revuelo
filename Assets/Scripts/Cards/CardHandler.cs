@@ -20,14 +20,18 @@ public class CardHandler : NetworkBehaviour
     [field: SerializeField, DisableIf("@DiscardPile != null"), SceneObjectsOnly, FoldoutGroup("Global References")] 
     public Transform DiscardPile { get; private set; }
     
-    [DisableIf("@SeatGrids != null && SeatGrids.Length == 6"), SceneObjectsOnly, FoldoutGroup("Global References")]
+    [DisableIf("@SeatGrids.Length == 6"), SceneObjectsOnly, FoldoutGroup("Global References")]
     public Transform[] SeatGrids;
     
-    [field: SerializeField, DisableIf("@TypeImages != null && TypeImages.Length == 6"), AssetsOnly, FoldoutGroup("Global References")] 
+    [field: SerializeField, DisableIf("@TypeImages != null && TypeImages.Length == 3"), AssetsOnly, FoldoutGroup("Global References")] 
     public Sprite[] TypeImages { get; private set; }
     
     [field: SerializeField, AssetsOnly, FoldoutGroup("Global References")]
-    public GameObject[] CardPrefabs { get; private set; }
+    public GameObject[] AttackCardPrefabs { get; private set; }
+    [field: SerializeField, AssetsOnly, FoldoutGroup("Global References")]
+    public GameObject[] DefenseCardPrefabs { get; private set; }
+    [field: SerializeField, AssetsOnly, FoldoutGroup("Global References")]
+    public GameObject[] RecruitCardPrefabs { get; private set; }
     
     #endregion
 
@@ -40,7 +44,7 @@ public class CardHandler : NetworkBehaviour
     public ulong StealerClientId => _stealerClientId.Value;
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
-    public void StealServerRpc(int quantity, RpcParams rpcParams = default)
+    public void StealRpc(int quantity, RpcParams rpcParams = default)
     {
         _stealQuantity.Value = quantity;
         _stealerClientId.Value = rpcParams.Receive.SenderClientId;

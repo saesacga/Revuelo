@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -5,14 +6,12 @@ using UnityEngine.EventSystems;
 public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler
 {
     #region Members
-
-    public CardType_Color.CardColor CardColorValueRef { get; set; }
-    public CardType_Color.CardType CardTypeValueRef { get; set; }
     
-    private readonly NetworkVariable<CardType_Color.CardType> _cardType = new NetworkVariable<CardType_Color.CardType>();
+    [EnumToggleButtons]
+    public CardType_Color.CardColor ValueCardColor;
+    
     private readonly NetworkVariable<CardType_Color.CardColor> _cardColor = new NetworkVariable<CardType_Color.CardColor>();
-    protected CardType_Color.CardType CardType => _cardType.Value;
-    public CardType_Color.CardColor CardColor => _cardColor.Value;
+    protected CardType_Color.CardColor CardColor => _cardColor.Value;
     
     private CardEffects _cardEffects;
 
@@ -21,12 +20,14 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler
     public static bool UsedCard { get; set; }
     
     protected abstract void OnInitialize();
-    protected abstract void CardEffectRpc();
+    protected abstract void CardEffect();
 
     #endregion
     
     public override void OnNetworkSpawn()
     {
+        Debug.Log("Spawned");
+        
         SetCardDataRpc();
         
         _cardEffects = GetComponent<CardEffects>() ?? gameObject.AddComponent<CardEffects>();
@@ -38,8 +39,7 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler
     [Rpc(SendTo.Server, RequireOwnership = false)] 
     private void SetCardDataRpc()
     {
-        _cardType.Value = CardTypeValueRef;
-        _cardColor.Value = CardColorValueRef;
+        _cardColor.Value = ValueCardColor;
     }
     
     public void OnPointerClick(PointerEventData eventData)
@@ -49,7 +49,7 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler
         
         UseCardRpc();
         
-        CardEffectRpc();
+        CardEffect();
     }
     
     [Rpc(SendTo.ClientsAndHost)]

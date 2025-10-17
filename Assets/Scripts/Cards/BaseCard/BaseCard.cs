@@ -3,49 +3,23 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BaseCard : CardNetwork
+public abstract class BaseCard : CardNetwork
 {
-    private BaseCardData _cardData;
-    public int CardNumberToGet { get; set; }
+    protected BaseCardData CardData;
+    protected readonly NetworkVariable<int> CardNumberToGet = new NetworkVariable<int>();
+    
+    protected abstract void PositiveEffect();
+    protected abstract void NegativeEffect();
     
     protected override void OnInitialize()
     {
+        CardData = GetComponent<BaseCardData>();
+        
         SetCardVisuals();
-        switch (CardType)
-        { 
-            case CardType_Color.CardType.Attack:
-                transform.AddComponent<BaseAtkCardV1>();
-                break; 
-            case CardType_Color.CardType.Defense:
-                transform.AddComponent<BaseDefV1>(); 
-                break;
-            case CardType_Color.CardType.Recruit:
-                transform.AddComponent<BaseRecV1>();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
     }
 
     private void SetCardVisuals()
     {
-        _cardData = GetComponent<BaseCardData>();
-        
-        _cardData.CardTypeFront.sprite = CardType switch 
-        {
-            CardType_Color.CardType.Attack => CardHandler.Instance.TypeImages[3],
-            CardType_Color.CardType.Defense => CardHandler.Instance.TypeImages[4], 
-            CardType_Color.CardType.Recruit => CardHandler.Instance.TypeImages[5],
-            _ => throw new System.Exception("Invalid card type") 
-        };
-        _cardData.CardTypeBack.sprite = CardType switch 
-        { 
-            CardType_Color.CardType.Attack => CardHandler.Instance.TypeImages[0], 
-            CardType_Color.CardType.Defense => CardHandler.Instance.TypeImages[1], 
-            CardType_Color.CardType.Recruit => CardHandler.Instance.TypeImages[2], 
-            _ => throw new System.Exception("Invalid card type") 
-        };
-        
         var cardColor = CardColor switch
         { 
             CardType_Color.CardColor.Green => Color.green,
@@ -54,28 +28,25 @@ public class BaseCard : CardNetwork
             _ => throw new System.Exception("Invalid card color") 
         };
         
-        _cardData.Frame.color = cardColor; 
-        _cardData.ReverseBg.color = cardColor;
+        CardData.Frame.color = cardColor; 
+        CardData.ReverseBg.color = cardColor;
     }
-
-    [Rpc(SendTo.ClientsAndHost)]
-    protected override void CardEffectRpc()
+    
+    protected override void CardEffect()
     {
-        if (!IsOwner) return;
-        
         RouletteRoller.Instance.OnRouletteSpinned += CardEffect; 
         RouletteRoller.Instance.SpinRouletteServerRpc();
     }
 
     private void CardEffect(int diceValue)
     {
-        if (diceValue >= CardNumberToGet)
+        if (diceValue >= CardNumberToGet.Value)
         {
-            GetComponent<IPlayable>().PositiveEffect();
+            PositiveEffect();
         }
         else
         {
-            GetComponent<IPlayable>().NegativeEffect();
+            NegativeEffect();
         }
         RouletteRoller.Instance.OnRouletteSpinned -= CardEffect;
     } 

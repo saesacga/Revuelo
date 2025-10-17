@@ -1844,6 +1844,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  <DiscardPile>k__BackingField: {fileID: 1115055245}
   SeatGrids:
   - {fileID: 1612960970}
   - {fileID: 1100226436}
@@ -1851,16 +1852,17 @@ MonoBehaviour:
   - {fileID: 59816449}
   - {fileID: 1028269181}
   - {fileID: 73120721}
-  <DiscardPile>k__BackingField: {fileID: 1115055245}
   <TypeImages>k__BackingField:
   - {fileID: 21300000, guid: c4e88886988ff09468d8da60a4edacb9, type: 3}
   - {fileID: 21300000, guid: 8aac615a02444404e8eefe564e658382, type: 3}
   - {fileID: 21300000, guid: bd5435a7d2652d14dbf3b3fd676ca3e7, type: 3}
-  - {fileID: 21300000, guid: 101f986b5d4c3cc42b315d89c92411e6, type: 3}
-  - {fileID: 21300000, guid: 1e2672a1606894b4894b084981f9741c, type: 3}
-  - {fileID: 21300000, guid: aa713a6384c3e504c91a8dda2d18f686, type: 3}
-  <CardPrefabs>k__BackingField:
-  - {fileID: 8682420188156141386, guid: e2c85459e45b8a343b863bc915453d39, type: 3}
+  <AttackCardPrefabs>k__BackingField:
+  - {fileID: 5373091419224733466, guid: 511fa0f38a033774e83b7fdbcc23c220, type: 3}
+  - {fileID: 633876421037429999, guid: 750f880470ba9084d870d42a4bc3f6b1, type: 3}
+  <DefenseCardPrefabs>k__BackingField:
+  - {fileID: 2244830762711774956, guid: a5094c37744383040979ebe3a5d32f97, type: 3}
+  <RecruitCardPrefabs>k__BackingField:
+  - {fileID: 6846908939529823993, guid: 1930f9cc855b3124db84e95db0f0d96c, type: 3}
 --- !u!114 &570921608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9825,7 +9827,6 @@ GameObject:
   - component: {fileID: 5632256709572652569}
   - component: {fileID: 8490574353352330179}
   - component: {fileID: 5192734107600462149}
-  - component: {fileID: 9140661689889662216}
   m_Layer: 0
   m_Name: Roullete
   m_TagString: Untagged
@@ -9833,27 +9834,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!65 &9140661689889662216
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9140661689889662215}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.5943974, y: 0.3, z: 0.5943974}
-  m_Center: {x: 0, y: -0.000000014901161, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

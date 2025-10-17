@@ -1,14 +1,14 @@
 
 using Unity.Netcode;
 
-public class BaseRecV1 : NetworkBehaviour, IPlayable 
-{ 
-    public void PositiveEffect()
+public class BaseRecV1 : BaseCard
+{
+    protected override void PositiveEffect()
     {
         NetworkHandler.Instance.EndTurnServerRpc();
     }
 
-    public void NegativeEffect()
+    protected override void NegativeEffect()
     {
         NetworkHandler.Instance.EndTurnServerRpc();
     }

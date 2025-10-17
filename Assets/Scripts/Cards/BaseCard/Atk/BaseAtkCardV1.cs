@@ -46,8 +46,6 @@ public class BaseAtkCardV1 : NetworkBehaviour, IPlayable
         baseCard.CardNumberToGet = UnityEngine.Random.Range(2, 20);
         cardData.CardNumberUpText.text = $"{baseCard.CardNumberToGet}";
         cardData.CardNumberDownText.text = $"{baseCard.CardNumberToGet-1}";
-        
-        _cardEffects = GetComponent<CardEffects>();
     } 
     
     public void PositiveEffect()
@@ -58,7 +56,7 @@ public class BaseAtkCardV1 : NetworkBehaviour, IPlayable
                 NetworkHandler.Instance.EndTurnServerRpc();
                 break;
             case PositiveAtkV1.Steal:
-                _cardEffects.StealRpc(_positiveQuantity);
+                CardHandler.Instance.StealServerRpc(_positiveQuantity);
                 break;
             default: 
                 throw new ArgumentOutOfRangeException();

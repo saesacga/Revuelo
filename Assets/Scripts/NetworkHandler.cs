@@ -118,8 +118,9 @@ public class NetworkHandler : NetworkBehaviour
             int seatIndex = (playerIndex - localIndex + count) % count;
 
             _playerSeats[playerId] = seatIndex;
-        } 
-        Debug.Log("Seats assigned!");
+        }
+
+        if (!IsMyTurn) CentralZone.Instance.ChangeCentralZone(CentralZone.CentralZoneState.DiscardPile);
     }
 
     #endregion

@@ -14,12 +14,14 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler
     protected CardType_Color.CardType CardType => _cardType.Value;
     public CardType_Color.CardColor CardColor => _cardColor.Value;
     
-    protected readonly NetworkVariable<bool> CardDiscarded = new NetworkVariable<bool>();
-    public bool CardDiscardedValue => CardDiscarded.Value;
+    private CardEffects _cardEffects;
+
+    private readonly NetworkVariable<bool> _cardDiscarded = new NetworkVariable<bool>();
+    public bool CardDiscardedValue => _cardDiscarded.Value;
     public static bool UsedCard { get; set; }
     
     protected abstract void OnInitialize();
-    protected abstract void UseCardRpc();
+    protected abstract void CardEffectRpc();
 
     #endregion
     
@@ -27,7 +29,8 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler
     {
         SetCardDataRpc();
         
-        ChangeCardHandLocalRpc(OwnerClientId);
+        _cardEffects = GetComponent<CardEffects>() ?? gameObject.AddComponent<CardEffects>();
+        _cardEffects.ChangeCardHandLocalRpc(OwnerClientId);
         
         OnInitialize();
     }
@@ -39,21 +42,22 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler
         _cardColor.Value = CardColorValueRef;
     }
     
-    [Rpc(SendTo.ClientsAndHost)]
-    public void ChangeCardHandLocalRpc(ulong clientId)
-    {
-        int seat = NetworkHandler.Instance.PlayerSeats[clientId]; //Pick a local seat for each card based on an owner
-
-        transform.SetParent(CardHandler.Instance.SeatGrids[seat]); //Set new card parent to local player grid
-        int lastIndex = CardHandler.Instance.SeatGrids[seat].childCount - 2;
-        transform.SetSiblingIndex(lastIndex); //Change the position in hierarchy so cards instantiate in the middle of the hand
-
-        if (IsServer) GetComponent<NetworkObject>().ChangeOwnership(clientId);
-    }
-    
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (IsOwner && CardType_Color.CardPicked && !CardDiscarded.Value && !UsedCard && NetworkHandler.Instance.IsMyTurn) 
-            UseCardRpc();
+        if (!IsOwner || !CardType_Color.CardPicked || _cardDiscarded.Value || UsedCard || !NetworkHandler.Instance.IsMyTurn) 
+            return;
+        
+        UseCardRpc();
+        
+        CardEffectRpc();
+    }
+    
+    [Rpc(SendTo.ClientsAndHost)]
+    private void UseCardRpc()
+    {
+        if (IsServer) _cardDiscarded.Value = true; 
+        
+        transform.SetParent(CardHandler.Instance.DiscardPile); 
+        UsedCard = true;
     }
 }

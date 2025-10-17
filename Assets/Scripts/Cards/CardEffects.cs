@@ -1,44 +1,43 @@
 using Unity.Netcode;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class CardEffects : NetworkBehaviour, IPointerClickHandler
 {
-    private static int _stealQuantity;
-    private static ulong _stealerClientId;
-    private CardNetwork _cardNetwork;
+    #region Setup
 
+    private CardNetwork _cardNetwork;
     private void OnEnable()
     {
         _cardNetwork = GetComponent<CardNetwork>();
     }
-    
-    [Rpc(SendTo.Server, RequireOwnership = false)]
-    public void StealRpc(int quantity, RpcParams rpcParams = default)
-    {
-        _stealQuantity = quantity;
-        _stealerClientId = rpcParams.Receive.SenderClientId;
-    }
-    
-    [Rpc(SendTo.Server, RequireOwnership = false)]
-    private void StealCardServerRpc(RpcParams rpcParams = default)
-    {
-        if (_stealQuantity <= 0) return;
-        
-        var clientId = rpcParams.Receive.SenderClientId;
-        var senderIsOwner = clientId == OwnerClientId; //You're clicking on your own card
-        var senderIsStealer = clientId == _stealerClientId; //You're the thief
-        
-        if (!senderIsStealer || senderIsOwner) return;
-        
-        _cardNetwork.ChangeCardHandLocalRpc(clientId);
-        
-        _stealQuantity--;
-        if (_stealQuantity <= 0) NetworkHandler.Instance.EndTurnServerRpc();
-    }
 
+    #endregion
+    
+    [Rpc(SendTo.ClientsAndHost)]
+    public void ChangeCardHandLocalRpc(ulong clientId)
+    {
+        int seat = NetworkHandler.Instance.PlayerSeats[clientId]; //Pick a local seat for each card based on an owner
+
+        transform.SetParent(CardHandler.Instance.SeatGrids[seat]); //Set new card parent to local player grid
+        int lastIndex = CardHandler.Instance.SeatGrids[seat].childCount - 2;
+        transform.SetSiblingIndex(lastIndex); //Change the position in hierarchy so cards instantiate in the middle of the hand
+
+        if (IsServer) GetComponent<NetworkObject>().ChangeOwnership(clientId);
+    }
+    
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!_cardNetwork.CardDiscardedValue) StealCardServerRpc();
+        #region Steal
+
+        var clickerId = NetworkManager.Singleton.LocalClientId;
+        var stealerId = CardHandler.Instance.StealerClientId;
+        var quantity = CardHandler.Instance.StealQuantity;
+
+        if (quantity <= 0 || clickerId != stealerId || clickerId == OwnerClientId || _cardNetwork.CardDiscardedValue) return;
+        
+        ChangeCardHandLocalRpc(stealerId);
+        CardHandler.Instance.ReduceStealQuantityServerRpc();
+
+        #endregion
     }
 }

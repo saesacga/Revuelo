@@ -59,13 +59,8 @@ public class BaseCard : CardNetwork
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    protected override void UseCardRpc()
+    protected override void CardEffectRpc()
     {
-        if(IsServer) CardDiscarded.Value = true;
-        
-        transform.SetParent(CardHandler.Instance.DiscardPile);
-        UsedCard = true;
-        
         if (!IsOwner) return;
         
         RouletteRoller.Instance.OnRouletteSpinned += CardEffect; 

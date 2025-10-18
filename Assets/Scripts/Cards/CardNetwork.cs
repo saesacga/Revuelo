@@ -1,6 +1,5 @@
 using Sirenix.OdinInspector;
 using Unity.Netcode;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
 public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler
@@ -26,9 +25,7 @@ public abstract class CardNetwork : NetworkBehaviour, IPointerClickHandler
     
     public override void OnNetworkSpawn()
     {
-        Debug.Log("Spawned");
-        
-        SetCardDataRpc();
+        if (IsServer) SetCardDataRpc();
         
         _cardEffects = GetComponent<CardEffects>() ?? gameObject.AddComponent<CardEffects>();
         _cardEffects.ChangeCardHandLocalRpc(OwnerClientId);

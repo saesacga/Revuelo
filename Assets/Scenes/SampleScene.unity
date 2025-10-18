@@ -1857,7 +1857,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8aac615a02444404e8eefe564e658382, type: 3}
   - {fileID: 21300000, guid: bd5435a7d2652d14dbf3b3fd676ca3e7, type: 3}
   <AttackCardPrefabs>k__BackingField:
-  - {fileID: 5373091419224733466, guid: 511fa0f38a033774e83b7fdbcc23c220, type: 3}
   - {fileID: 633876421037429999, guid: 750f880470ba9084d870d42a4bc3f6b1, type: 3}
   <DefenseCardPrefabs>k__BackingField:
   - {fileID: 2244830762711774956, guid: a5094c37744383040979ebe3a5d32f97, type: 3}

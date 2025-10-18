@@ -26,7 +26,7 @@ public class CardType_Color : NetworkBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         if (CardPicked || !NetworkHandler.Instance.IsMyTurn) return;
-        for (var i = 0; i < 5; i++) DeckPressed();
+        for (var i = 0; i < 3; i++) DeckPressed();
     }
 
     private void DeckPressed()
@@ -41,17 +41,17 @@ public class CardType_Color : NetworkBehaviour, IPointerClickHandler
     {
         if (!IsServer) return;
 
-        ulong ownerId = rpcParams.Receive.SenderClientId;
+        var ownerId = rpcParams.Receive.SenderClientId;
         
-        var sourceArray = Type.Value switch
+        var sourceArray = Type.Value switch //Pick the array of cards based on the card type
         {
             CardType.Attack => CardHandler.Instance.AttackCardPrefabs,
             CardType.Recruit => CardHandler.Instance.RecruitCardPrefabs,
             CardType.Defense => CardHandler.Instance.DefenseCardPrefabs,
             _ => throw new Exception("Invalid card type") 
         };
-
-        // Filtrar por color
+        
+        //Filter the array of cards based on the card color
         var filtered = sourceArray.Where(c =>
             {
                 var card = c.GetComponent<CardNetwork>();
@@ -67,7 +67,8 @@ public class CardType_Color : NetworkBehaviour, IPointerClickHandler
 
     [Rpc(SendTo.Server, RequireOwnership = false)] private void GetRandomTypeRpc()
     {
-        Type.Value = (CardType)UnityEngine.Random.Range(0, Enum.GetValues(typeof(CardType)).Length);
+        /*Type.Value = (CardType)UnityEngine.Random.Range(0, Enum.GetValues(typeof(CardType)).Length);*/
+        Type.Value = CardType.Attack;
         
         ChangeCardTypeRpc(Type.Value); 
     }

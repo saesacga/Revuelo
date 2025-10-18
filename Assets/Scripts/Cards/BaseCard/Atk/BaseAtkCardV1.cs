@@ -4,49 +4,63 @@ using UnityEngine;
 
 public class BaseAtkCardV1 : BaseCard
 {
-    private enum PositiveAtkV1 { Steal, Discard }
-    private enum NegativeAtkV1 { NothingHappens, UDiscard, Gift, GetSteal,  }
-    private enum Target { AnyPlayer, RightPlayer, LeftPlayer }
+    private enum PositiveEffectV1 { Steal, Discard }
+    private enum NegativeEffectV1 { NothingHappens, UDiscard, Gift  }
+    //private enum Target { AnyPlayer, RightPlayer, LeftPlayer }
     
-    private readonly NetworkVariable<PositiveAtkV1> _positiveAtk = new NetworkVariable<PositiveAtkV1>();
-    private readonly NetworkVariable<NegativeAtkV1> _negativeAtk = new NetworkVariable<NegativeAtkV1>();
-    private readonly NetworkVariable<Target> _target = new NetworkVariable<Target>();
+    private readonly NetworkVariable<PositiveEffectV1> _positiveEffect = new NetworkVariable<PositiveEffectV1>();
+    private readonly NetworkVariable<NegativeEffectV1> _negativeEffect = new NetworkVariable<NegativeEffectV1>();
+    //private readonly NetworkVariable<Target> _target = new NetworkVariable<Target>();
     
     private readonly NetworkVariable<int> _positiveQuantity = new NetworkVariable<int>();
     private readonly NetworkVariable<int> _negativeQuantity = new NetworkVariable<int>();
-    
+
     public override void OnNetworkSpawn()
     {
-        Debug.Log("Attack Spawned 2.0");
-        
         base.OnNetworkSpawn();
-        SetCardDataServerRpc();
+        
+        if (IsServer) SetCardDataServerRpc();
     }
-
+    
     [Rpc(SendTo.Server, RequireOwnership = false)]
     private void SetCardDataServerRpc()
     {
-        _positiveAtk.Value = CardColor switch
+        _positiveEffect.Value = CardColor switch
         { 
-            CardType_Color.CardColor.Green => PositiveAtkV1.Discard, 
-            CardType_Color.CardColor.Orange => (PositiveAtkV1)UnityEngine.Random.Range(0, Enum.GetValues(typeof(PositiveAtkV1)).Length), 
-            CardType_Color.CardColor.Red => PositiveAtkV1.Steal, 
+            CardType_Color.CardColor.Green => PositiveEffectV1.Discard, 
+            CardType_Color.CardColor.Orange => (PositiveEffectV1)UnityEngine.Random.Range(0, Enum.GetValues(typeof(PositiveEffectV1)).Length), 
+            CardType_Color.CardColor.Red => PositiveEffectV1.Steal, 
             _ => throw new Exception("Invalid card color")
         }; 
-        _negativeAtk.Value = CardColor switch 
+        _negativeEffect.Value = CardColor switch 
         { 
-            CardType_Color.CardColor.Green => (NegativeAtkV1)UnityEngine.Random.Range(0, 1), 
-            CardType_Color.CardColor.Orange => (NegativeAtkV1)UnityEngine.Random.Range(1, 2), 
-            CardType_Color.CardColor.Red => (NegativeAtkV1)UnityEngine.Random.Range(2, 3), 
+            CardType_Color.CardColor.Green => NegativeEffectV1.UDiscard, 
+            CardType_Color.CardColor.Orange => (NegativeEffectV1)UnityEngine.Random.Range(1, 2), 
+            CardType_Color.CardColor.Red => NegativeEffectV1.Gift, 
             _ => throw new Exception("Invalid card color") 
         };
         
-        //Set effect and target text
-        _positiveQuantity.Value = UnityEngine.Random.Range(2, 5); 
-        _negativeQuantity.Value = UnityEngine.Random.Range(1, 3); 
+        _positiveQuantity.Value = (CardColor, _positiveEffect.Value) switch
+        {
+            (CardType_Color.CardColor.Green, PositiveEffectV1.Discard) => UnityEngine.Random.Range(1, 3),
+            (CardType_Color.CardColor.Orange, PositiveEffectV1.Discard) => UnityEngine.Random.Range(2, 4),
+            (CardType_Color.CardColor.Orange, PositiveEffectV1.Steal) => UnityEngine.Random.Range(1, 3),
+            (CardType_Color.CardColor.Red, PositiveEffectV1.Steal) => UnityEngine.Random.Range(3, 5),
+
+            _ => throw new Exception("Invalid card color")
+        };
+        
+        _negativeQuantity.Value = _positiveQuantity.Value - 1;
+        if (_negativeQuantity.Value < 1) _negativeEffect.Value = NegativeEffectV1.NothingHappens;
         
         //Set the number to get on the dice
-        CardNumberToGet.Value = UnityEngine.Random.Range(2, 20);
+        CardNumberToGet.Value = CardColor switch 
+        { 
+            CardType_Color.CardColor.Green => UnityEngine.Random.Range(7, 10), 
+            CardType_Color.CardColor.Orange => UnityEngine.Random.Range(9, 12), 
+            CardType_Color.CardColor.Red => UnityEngine.Random.Range(13, 15), 
+            _ => throw new Exception("Invalid card color")
+        };
         
         DisplayCardDataRpc();
     }
@@ -54,8 +68,20 @@ public class BaseAtkCardV1 : BaseCard
     [Rpc(SendTo.ClientsAndHost)]
     private void DisplayCardDataRpc()
     {
-        CardData.PositiveEffectText.text = ($"{_positiveAtk} {_positiveQuantity} cards from {_target}");
-        CardData.NegativeEffectText.text = $"{_negativeAtk} {_negativeQuantity} card to {_target}";
+        CardData.PositiveEffectText.text = _positiveEffect.Value switch
+        {
+            PositiveEffectV1.Discard=> $"Choose another player to discard {_positiveQuantity.Value} {(_positiveQuantity.Value == 1 ? "card" : "cards")}",
+            PositiveEffectV1.Steal => $"Steal {_positiveQuantity.Value} {(_positiveQuantity.Value == 1 ? "card" : "cards")} from another player",
+            _ => throw new Exception("Invalid card effect")
+        };
+
+        CardData.NegativeEffectText.text = _negativeEffect.Value switch
+        {
+            NegativeEffectV1.NothingHappens => "Nothing happens",
+            NegativeEffectV1.UDiscard => $"Discard {_negativeQuantity.Value} {(_negativeQuantity.Value == 1 ? "card" : "cards")}",
+            NegativeEffectV1.Gift => $"Give another player {_negativeQuantity.Value} {(_negativeQuantity.Value == 1 ? "card" : "cards")}",
+            _ => throw new Exception("Invalid card effect")
+        };
         
         CardData.CardNumberUpText.text = $"{CardNumberToGet.Value}";
         CardData.CardNumberDownText.text = $"{CardNumberToGet.Value-1}";
@@ -63,12 +89,12 @@ public class BaseAtkCardV1 : BaseCard
 
     protected override void PositiveEffect()
     {
-        switch (_positiveAtk.Value) 
+        switch (_positiveEffect.Value) 
         { 
-            case PositiveAtkV1.Discard:
+            case PositiveEffectV1.Discard:
                 NetworkHandler.Instance.EndTurnServerRpc();
                 break;
-            case PositiveAtkV1.Steal:
+            case PositiveEffectV1.Steal:
                 CardHandler.Instance.StealRpc(_positiveQuantity.Value);
                 break;
             default: 
@@ -79,5 +105,11 @@ public class BaseAtkCardV1 : BaseCard
     protected override void NegativeEffect() 
     { 
         NetworkHandler.Instance.EndTurnServerRpc();
+    }
+    
+    private float Probability()
+    {
+        var probability = (20 - CardNumberToGet.Value + 1f) / 20;
+        return probability;
     }
 }
